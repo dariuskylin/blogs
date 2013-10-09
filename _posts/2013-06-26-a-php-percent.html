@@ -1,0 +1,148 @@
+---
+layout: post
+title: 按百分比机率的随机获取
+category: php
+description: 游戏里都有随机掉装备的设定，不同装备有不同的掉率。我一直很纠结这个问题，最近考虑了一下，似乎有一个很简单的解决办法，这里记录一下，但不一定是正确的。
+img: 201306/0602.jpg
+keywords: php,百分比机率,掉落,随机,获取
+---
+<p>
+游戏里都有随机掉装备的设定，不同装备有不同的掉率。我一直很纠结这个问题，最近考虑了一下，似乎有一个很简单的解决办法，这里记录一下，但不一定是正确的。
+</p>
+<h2 class="content_h2">
+原理
+</h2>
+<p>
+因为是百分比，所以规定1-100，这100个数为基准，每次取一个数的机率为1%，那一次取中1-10这10个数字的机率是多少？是不是10%。根据这个规则，可以这样理解，如果A和B，获取的机率为30%和70%，那可以用1-30代表A，31-100代表B，这样，抽取1-30的机率为30%，所以A的机率就是30%，同理，B的机率为70%。如果这个结论是正常的，那我们就可以这样来做了
+</p>
+<h2 class="content_h2">
+基本实现
+</h2>
+<p>
+条件：
+</p>
+<p>
+A:10%<br/>
+B:20%<br/>
+C:30%<br/>
+D:40%
+</p>
+<p>
+首先，建立一个百分比的数组，以百分比的值为下标，物品为值
+</p>
+<pre class="prettyprint lang-php">
+$items=array(
+	'10'=>'A',
+	'20'=>'B',
+	'30'=>'C',
+	'40'=>'D'
+);
+</pre>
+<p>
+接下来，根据这个数组，将它重新“洗牌”，即将1-10指向A，11-30指向B，31-60指向C，61-100指向D
+</p>
+<pre class="prettyprint lang-php">
+function create($items,$p){
+	$t=$p;
+	$q=$p/100;
+	$itemInterval=array();
+	foreach($items as $k=>$v){
+		$lw=$t==$p?1:$p-$t+1;
+		$up=$t==$p?$k*$q:$p-$t+$k*$q;
+		$t=$t-$k*$q;
+		$itemInterval[]=array($v,$lw,$up);
+	}
+	return $itemInterval;
+}
+</pre>
+<p>
+这里呢多考虑了一点，就是如果要求是0.3%，或是0.03%呢，那100为基数肯定就不行了，所以这里使用了参数p，如果是千分位，那就可以这样
+</p>
+<pre class="prettyprint lang-php">
+$items=array(
+	'0.3'=>'A',
+	'20'=>'B',
+	'30'=>'C',
+	'40'=>'D',
+	'9.7'=>'E'
+);
+function create($items,$p){
+	$t=$p;
+	$q=$p/100;
+	$itemInterval=array();
+	foreach($items as $k=>$v){
+		$lw=$t==$p?1:$p-$t+1;
+		$up=$t==$p?$k*$q:$p-$t+$k*$q;
+		$t=$t-$k*$q;
+		$itemInterval[]=array($v,$lw,$up);
+	}
+	return $itemInterval;
+}
+
+create($items,1000);
+</pre>
+<p>
+得出的结果将是1-1000，分成了5个段。有了这个新数组，就可以随机取值了
+</p>
+<pre class="prettyprint lang-php">
+function roll($sides){
+	return mt_rand(1, $sides);
+}
+</pre>
+<p>
+这个方法都懂，$sides就是你要取的上限，如果是百分位，就传100，千分位传1000，返回的随机值，通过create返回的新数组做比较，它属于哪一个分段，那么这个分段所代表的对象，就被抽中了
+</p>
+<pre class="prettyprint lang-php">
+function get($itemInterval,$p){
+	$p=roll($p);
+	foreach($itemInterval as $v){
+		if($p&gt;=$v[1]&&$p&lt;=$v[2]){
+			$item=$v[0];
+		}
+	}
+	return $item;
+}
+</pre>
+<p>
+最后，写一个测试，做一个平均值，从1000次取值和10000次取值中，算出各项的平均值，看看它们是不是和我们想要的结果接近
+</p>
+<pre class="prettyprint lang-php">
+function average($itemInterval,$p,$t){
+	$o=array();
+	echo "做".$t."次取值时，各值取得机率：&lt;br/&gt;";
+	for($i=1;$i&lt;=$t;$i++){
+		$item=get($itemInterval,$p);
+		if($o[$item]){
+			$o[$item]=$o[$item]+1;
+		}else{
+			$o[$item]=1;
+		}
+	}
+
+	foreach($o as $k=&gt;$v){
+		$p=$v/$t*100;
+		echo "".$k.": ".$p."%&lt;br/&gt;";
+	}
+}
+</pre>
+<p>
+使用
+</p>
+<pre class="prettyprint lang-php">
+average(create($items,1000),1000,1000);
+average(create($items,1000),1000,10000);
+</pre>
+<p>
+结果
+</p>
+<p>
+<img src="{{ site:url }}/images/201306/0602.jpg" alt="" />
+</p>
+<p>
+基本上是满足的，说明差不到哪里去。如果是抽奖，就可以做一个奖品的对应机率数组，然后传入生成器里，返回来的，就是抽中的奖品啦。
+</p>
+<script type="text/javascript">
+jQuery(function($){
+	window.prettyPrint && prettyPrint();
+});
+</script>

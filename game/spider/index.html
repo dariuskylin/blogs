@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Javascript game_蜘蛛纸牌</title>
+        <meta name="keywords" content="javascript,game,蜘蛛纸牌"/>
+        <meta name="description" content="Javascript小游戏蜘蛛纸牌" />
+        <script src="../../jquery.js" type="text/javascript"></script>
+</head>
+<body>
+<style type="text/css">
+body{background-color:#fff;font:12px Tahoma;}
+.game_tips{width:800px;margin:0 auto;font-size:14px;font-weight: bold;}
+#game_map{width:802px;margin:0 auto;margin-top:10px;height:450px;background-color:#088131;padding:10px;position: relative;}
+#post{width:61px;height:86px;background-color:#999;position: absolute;padding:5px;right:-81px;bottom:0px;background:url('bg.jpg');background-position: -923px 0px;z-index: 100;}
+#postnum{position: absolute;top:-20px;left:0px;}
+.card{width:71px;height:96px;background-color:#999;position: absolute;background:url('bg.jpg');font-size:0px;border:1px solid #088131;right:-81px;bottom:0px;z-index: 1;text-align: right;}
+
+.cardv1{background-position: 0px 0px;}
+.cardv2{background-position: -71px 0px;}
+.cardv3{background-position: -142px 0px;}
+.cardv4{background-position: -213px 0px;}
+.cardv5{background-position: -284px 0px;}
+.cardv6{background-position: -355px 0px;}
+.cardv7{background-position: -426px 0px;}
+.cardv8{background-position: -497px 0px;}
+.cardv9{background-position: -568px 0px;}
+.cardv10{background-position: -639px 0px;}
+.cardv11,.cardvJ{background-position: -710px 0px;}
+.cardv12,.cardvQ{background-position: -781px 0px;}
+.cardv13,.cardvK{background-position: -852px 0px;}
+
+.cardbg{width:59px;border:1px solid #088131;height:90px;background-color:#088131;position: absolute;padding:5px;z-index: 0;}
+.cardbg0{left:10px;}
+.cardbg1{left:91px;}
+.cardbg2{left:172px;}
+.cardbg3{left:253px;}
+.cardbg4{left:334px;}
+.cardbg5{left:415px;}
+.cardbg6{left:496px;}
+.cardbg7{left:577px;}
+.cardbg8{left:658px;}
+.cardbg9{left:739px;}
+
+.back{font-size:0px;background-color:#777;background-position: -923px 0px;text-align: right;color:#ff0000;}
+
+.scores{float:right;font-size:16px;}
+#scores{font-size:18px;font-weight:bold;font-family: tahoma;color:#ff0000;}
+.re{float:right;}
+</style>
+<div class="game_tips" id="tips">
+	<input type="button" value="重来" id="re" class="re" /><div class="scores">移牌 <span id="scores">0</span> 次</div>
+	Javascript game_蜘蛛纸牌
+</div>
+<div id="game_map">
+正在努力加载...
+</div>
+<script type="text/javascript">
+jQuery(function($){
+	var _cards_init=['1','2','3','4','5','6','7','8','9','10','11','12','13'];
+	var _cards=[];
+	var _cards_table=new Array();
+	var _cards_selected=[];
+	var _left_group=8;
+	var _moveCardNum=0;
+
+	var _top_base=10;
+	var _top_step=20;
+	var _cardsPostion=[832,372];
+
+	var _cards_left=new Array();
+	_cards_left[0]='10';
+	_cards_left[1]='91';
+	_cards_left[2]='172';
+	_cards_left[3]='253';
+	_cards_left[4]='334';
+	_cards_left[5]='415';
+	_cards_left[6]='496';
+	_cards_left[7]='577';
+	_cards_left[8]='658';
+	_cards_left[9]='739';
+
+	var img = new Image;
+	img.src='bg.jpg';
+	img.onload = function(){
+		init();
+	}
+	
+	//初始化牌，洗牌
+	function init(){
+		var _this=this;
+		_cards_init=_cards_init.concat(_cards_init,_cards_init,_cards_init);
+		_cards_init=_cards_init.concat(_cards_init);
+
+		shuffle();
+		for(var i=0;i<10;i++){
+			_cards_table[i]=new Array();
+		}
+		var _html_cards_table='';
+		
+		for(var i=0;i<54;i++){
+			if(i<=9){
+				j=i;
+				_html_cards_table+="<div class='cardbg cardbg"+j+"' action-t='' action-line='"+j+"'></div>";
+			}else{
+				var s=i.toString();
+				j=s.substring(s.length-1);
+			}
+			j=parseInt(j);
+			var num=cardNum(_cards[i]);
+			var back='';
+			//背面牌
+			if(i>=0&&i<44){
+				back='back';
+			}
+			var l=_cards_table[j].length;
+			_html_cards_table+="<div class='card cardv"+num+" card"+j+" "+back+"' action-t='"+back+"' action-line='"+j+"' action-index='"+l+"' style='z-index:1;position:absolute;left:"+_cardsPostion[0]+"px;top:"+_cardsPostion[1]+"px;'>"+_cards[i]+"</div>";
+			_cards_table[j].push(num);
+		}
+		_cards.splice(0,54);
+		_html_cards_table+='<div id="post"><span id="postnum">5</span></div>';
+		$("#game_map").html(_html_cards_table);
+		$("#scores").html(0);
+
+		var _i=0;
+		this.move_animation=function(){
+			//alert($(".card").eq(_i).css('bottom'));
+			var line=$(".card").eq(_i).attr('action-line');
+			var index=$(".card").eq(_i).attr('action-index');
+			move_animation($(".card").eq(_i),line,index);
+			_i++;
+			if(_i<54){
+				setTimeout(_this.move_animation,100);
+			}
+		}
+		this.move_animation();
+		cardBg();
+		clickCard();
+		post();
+	}
+
+	//洗牌
+	function shuffle(){
+		var len=_cards_init.length;
+		if(len>0){
+			var i=random(len);
+			_cards.push(_cards_init[i]);
+			_cards_init.splice(i,1);
+			shuffle();
+		}
+	}
+
+	//发牌
+	function post(){
+		$("#post").click(function(){
+			if(_cards.length<=0){
+				alert('无牌可发了');
+				return false;
+			}
+			var _html_cards_table='';
+			for(var i=0;i<10;i++){;
+				var num=cardNum(_cards[i]);
+				var l=_cards_table[i].length;
+				_html_cards_table+="<div class='card cardv"+num+" card"+i+"' action-t='' action-index='"+l+"' action-line='"+i+"' style='z-index:1;position:absolute;left:"+_cardsPostion[0]+"px;top:"+_cardsPostion[1]+"px;'>"+_cards[i]+"</div>";
+				_cards_table[i].push(num);
+			}
+			_cards.splice(0,10);
+			var cardbenum=$(".card").length;
+			$("#game_map").append(_html_cards_table);
+			var _i=cardbenum;
+			var _this=this;
+			this.move_animation=function(){
+				var line=$(".card").eq(_i).attr('action-line');
+				var index=$(".card").eq(_i).attr('action-index');
+				move_animation($(".card").eq(_i),line,index);
+				_i++;
+				if(_i<cardbenum+10){
+					setTimeout(_this.move_animation,100);
+				}
+			}
+			this.move_animation();
+			$("#postnum").html(parseInt($("#postnum").html())-1);
+			clickCard();
+		});
+	}
+
+	//为牌添加事件
+	function clickCard(){
+		$(".card").unbind('click').click(function(){
+			var line=$(this).attr('action-line');
+			var back=$(this).attr('action-t');
+			if(back){
+				return false;
+			}
+			var index=parseInt($(this).attr('action-index'));
+			var cards_num;
+			line=parseInt(line);
+			cards_num=_cards_table[line][index];
+			if(_cards_selected.length==1){
+				if(line!=_cards_selected[0][0]){
+					if((cards_num-1)==_cards_selected[0][2]){
+						var _index=index+1;
+						moveCard(line,_index,_cards_selected[0][2]);
+					}else{
+						alert('不能移动到那个位置2_'+cards_num+'_'+_cards_selected[0][2]);
+					}
+				}
+				css_remove();
+				_cards_selected.shift();
+				clickCard();
+			}else{
+				if(getCards(line,index)==0){
+					_cards_selected[0]=[];
+					_cards_selected[0][0]=line;
+					_cards_selected[0][1]=index;
+					_cards_selected[0][2]=cards_num;
+				}else{
+					css_remove();
+				}
+			}
+		});
+	}
+
+	function cardBg(){
+		$(".cardbg").unbind('click').click(function(){
+			var line=$(this).attr('action-line');
+			moveCard(line,0,_cards_selected[0][2]);
+			css_remove();
+			_cards_selected.shift();
+			clickCard();
+		});
+	}
+
+	function cardNum(i){
+		switch(i){
+			case 'J':
+				return 11;
+				break;
+			case 'Q':
+				return 12;
+				break;
+			case 'K':
+				return 13;
+				break;
+			default:
+				return i;
+				break;
+		}
+	}
+
+	function moveCard(line,index,cards_num){
+		line=parseInt(line);
+		var len=_cards_table[_cards_selected[0][0]].length;
+		_cards_table[_cards_selected[0][0]].splice(_cards_selected[0][1],len);
+		var html='';
+		var moveCardIndex=index;
+		_moveCardNum=len-_cards_selected[0][1];
+		for(var i=_cards_selected[0][1];i<len;i++){
+			var v=$(".card"+_cards_selected[0][0]).eq(_cards_selected[0][1]).html();
+			//html+="<div class='card cardv"+v+" card"+line+" ct"+moveCardIndex+"' action-line='"+line+"' action-t=''>"+v+"</div>";
+			var o=$(".card"+_cards_selected[0][0]).eq(_cards_selected[0][1]);
+			var num=cardNum(o.html());
+			_cards_table[line].push(num);
+			//$(".card"+_cards_selected[0][0]).eq(_cards_selected[0][1]).remove();
+			var cardline=o.attr('action-line');
+			o.removeClass('card'+cardline);
+			o.addClass('card'+line);
+			o.attr('action-line',line);
+			o.attr('action-index',moveCardIndex);
+			move_animation(o,line,moveCardIndex,1);
+			moveCardIndex++;
+		}
+		$(".card"+_cards_selected[0][0]).eq(_cards_selected[0][1]-1).removeClass('back');
+		$(".card"+_cards_selected[0][0]).eq(_cards_selected[0][1]-1).attr('action-t','');
+		//$("#game_map").append(html);
+		$("#scores").html(parseInt($("#scores").html())+1);
+		
+	}
+
+	function checkComplate(line){
+		var obj=$(".card"+line)
+		var len=obj.length;
+		var preNum=0;
+		var error=0;
+		var comNum=[];
+		if(len>=13){
+			for(var i=0;i<len;i++){
+				if(obj.eq(i).attr('action-t')==''){
+					if(preNum>0){
+						if(parseInt(cardNum(obj.eq(i).html()))+1==preNum){
+						}else{
+							comNum=[];
+						}
+						comNum.push(i);
+					}else{
+						comNum.push(i);
+					}
+					preNum=parseInt(cardNum(obj.eq(i).html()));
+				}
+			}
+			if(comNum.length>=13){
+				for(var i in comNum){
+					obj.eq(comNum[i]).remove();
+					if(i==0){
+						obj.eq(comNum[i]-1).removeClass('back');
+						obj.eq(comNum[i]-1).attr('action-t','');
+						var len=_cards_table[line].length;
+						_cards_table[line].splice(comNum[i],len);
+					}
+				}
+				_left_group--;
+				if(_left_group==0){
+					alert('你赢了，共移动'+$('#scores').html()+'次');
+					$("#re").click();
+				}
+			}
+		}
+	}
+
+	function getCards(line,index){
+		var len=_cards_table[line].length;
+		var preNum=0;
+		var error=0;
+		for(var i=index;i<len;i++){
+			if(preNum>0){
+				if(parseInt(cardNum($(".card"+line).eq(i).html()))+1==preNum){
+					preNum=parseInt(cardNum($(".card"+line).eq(i).html()));
+				}else{
+					error=1;
+				}
+			}else{
+				preNum=parseInt(cardNum($(".card"+line).eq(i).html()));
+			}
+			css_click($(".card"+line).eq(i));
+		}
+		return error;
+	}
+
+	function css_click(obj){
+		obj.css('border','1px solid #ffff00');
+	}
+
+	function css_remove(){
+		$(".card").css('border','1px solid #088131');
+	}
+
+	//取随机数
+	function random(len){
+		return Math.floor(Math.random()*(len-1));
+	}
+
+	//返回top值
+	function get_top(index){
+		return _top_base+index*_top_step;
+	}
+
+	//移动纸牌动画
+	function move_animation(obj,line,index,re){
+		var line_index=_cards_table[line].length-1;
+		obj.css('z-index',index);
+		obj.animate({'left':_cards_left[line],'top':get_top(index)},'fast',function(){
+			if(re){
+				var num=obj.html();
+				var opt=obj.position();
+				obj.remove();
+				$("#game_map").append("<div class='card cardv"+num+" card"+line+"' action-index='"+index+"' action-line='"+line+"' action-t='' style='left:"+opt.left+"px;top:"+opt.top+"px;z-index:"+index+"'>"+num+"</div>");
+				clickCard();
+				_moveCardNum--;
+				if(_moveCardNum==0){
+					checkComplate(line);
+				}
+			}
+		});
+	}
+
+	$("#re").click(function(){
+		_cards_init=['1','2','3','4','5','6','7','8','9','10','11','12','13'];
+		_cards=[];
+		_cards_table=new Array();
+		_cards_selected=[];
+		_left_group=8;
+		init();
+	});
+});
+</script>
+<div style="display:none;">
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F02dd3320304085dfa94f6456bb126ed4' type='text/javascript'%3E%3C/script%3E"));
+</script>
+</div>
+</body>
+</html>

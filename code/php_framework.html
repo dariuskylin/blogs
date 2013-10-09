@@ -1,0 +1,626 @@
+---
+layout: code
+title: 一个PHP框架
+keywords: php,framework,框架
+---
+<h2 class="content_h2">
+关于框架
+</h2>
+<p>
+很简单的一个框架，只是实现controller、data、view的封装，特别是对数据和模板的封装，方便构件。因为比较简单，所以很容易修改和添加程序。
+</p>
+<h2 class="content_h2">
+更新
+</h2>
+<p>
+<strong>2012年10月15日 v1.1.2</strong>
+</p>
+<blockquote class="content_quote">
+1、更新数据层<br/>
+2、更新模板层，增加语言设置
+</blockquote>
+<h2 class="content_h2">
+下载
+</h2>
+<p>
+<a href="{{ site:url }}/files/php_framework.zip" class="linkorg">点击这里</a>
+</p>
+<p>
+以下是简单说明，详细说明，请查看压缩包里的文档
+</p>
+<h2 class="content_h2">
+基本目录结构
+</h2>
+<pre class="content_pre">
+/根目录
+	/app
+	/attachments
+	/cache
+	/source
+	/views
+	.htaccess
+	index.php
+</pre>
+<h3>
+/attachments
+</h3>
+<p>
+预定义附件目录。此目录并不是必要目录，你可以在开发过程中任意调整。
+</p>
+<h3>
+/cache
+</h3>
+<p>
+数据缓存目录。必要目录。不可删除，但可以修改，可以/source/common.inc.php中修改。
+</p>
+<p>
+该目录下还包括3个预定子目录：
+</p>
+<blockquote class="content_quote">
+/cache/data 数据缓存目录<br/>
+/cache/views 模板缓存目录<br/>
+/cache/sys 系统配置缓存目录<br/>
+</blockquote>
+<h3>
+/app
+</h3>
+<p>
+你的文件存放目录。必要目录，不可删除，但可以修改，修改同上
+</p>
+<p>
+该目录下包括7个预定子目录：
+</p>
+<blockquote class="content_quote">
+/class 你的类文件<br/>
+/configs 你的配置文件<br/>
+/functions 你的函数文件<br/>
+/language 你的语言文件<br/>
+/script 你的javascript文件<br/>
+/controllers 控制器目录。必要目录。你所有的控制器文件都需要存放到该目<br/>
+/model 你的数据类目录<br/>
+/source<br/>
+框架核心文件。如：基础类文件、模板解析文件、数据封闭文件等。
+该目录同样包含4个预定子目录，其结构和app文件夹基本一至
+</blockquote>
+<h2 class="content_h2">
+数据库配置
+</h2>
+<p>
+打开数据库配置文件，可以在/source/configs/database.config.php找到它。你也可以把这个文件移动到/app/configs/database.config.php中。按文件中各项填写数据库相关内容。一个简单的配置如下：
+</p>
+<pre class="content_pre">
+return array(
+	'dbhost' => '127.0.0.1', 
+	'dbuser' => 'root',
+	'dbpw' => '',
+	'dbname' => 'tanyi',
+	'pconnect' => 0,
+	'tablepre' => 'hk_',
+	'dbcharset' => 'utf8',
+);
+</pre>
+<h2 class="content_h2">
+访问连接构成
+</h2>
+<p>
+本框架是单一文件入口，其文件为index.php<br/>
+有两个预定义参数：<br/>
+controller：访问控制器名称<br/>
+method：访问控制器内的方法名称<br/>
+一个简单的访问地址：http://www.example.com/index.php?controller=index&method=view<br/>
+其中controller=index表示控制器index_controller.php，method=view表示在控制器index_controller.php中的view方法。<br/>
+如果还有其它参数，直接在后面添加，如：&id=1<br/>
+</p>
+<h2 class="content_h2">
+提供的伪静太规则
+</h2>
+<p>
+在.htaccess文件中，可以看到其规则：
+</p>
+<p>
+RewriteRule ^m/([A-Za-z]+)+(/([A-Za-z]+)+)*$  index.php?controller=$1&method=$3
+</p>
+<p>
+那用伪静态访问前面的连接地址，就应该是这样：http://www.example.com/m/index/view<br/>
+这只是一个简单应用，具体的静态方法，可以根据你的需求自己定制
+</p>
+<h2 class="content_h2">
+默认路由
+</h2>
+<p>
+默认路由，就是告诉程序，在不指定控制器和方法的时候，它应该调用什么控制器下的什么方法。<br/>
+框架的默认路由设置为：controller->index，method->index<br/>
+控制器和方法都用了index，也就是说，像直接访问：http://www.example.com的时候，程序其它执行的是：http://www.example.com/index.php?controller=index&method=index
+</p>
+<h3>
+设置默认路由
+</h3>
+<p>
+默认路由的设置在配置文件/source/configs/route.config.php中，默认设置如下：
+</p>
+<pre class="prettyprint lang-php">
+return array('controller' => 'index', 'method' => 'index');
+</pre>
+<h2 class="content_h2">
+控制器（controller）
+</h2>
+<h3>
+创建控制器
+</h3>
+<p>
+下面，我们创建一个新的控制器，叫做post_controller.php，将它存放到/app/controllers目录里。一个控制器的基本内容需要像下面的例子：
+</p>
+<pre class="prettyprint lang-php">
+class post extends Base{
+	public function __construct(){
+		parent::__construct();
+	}
+｝
+</pre>
+<p>
+每一个控制器都需要继承父类Base，你也可以建立自己的基础父类来继承Base类，这样，你就可以在控制器中继承你自己建立的基础父类。
+</p>
+<h3>
+定义方法
+</h3>
+<p>
+接下来需要定义index方法，因为默认路由访问的方法为index，所以，如果没有这个方法，程序很可能会因为找不到方法而报错。
+</p>
+<pre class="prettyprint lang-php">
+class post extends Base{
+	public function __construct(){
+		parent::__construct();
+	}
+
+public function index(){
+		//code
+	}
+｝
+</pre>
+<p>
+这样子，程序就可以用下面的地址进行访问：http://www.example.com/m/post/index，当然，也可以直接用：http://www.example.com/m/post进行访问。因为默认路由设置的方法为index。<br/>
+接下来，我们再定义一个方法：hello();<br/>
+</p>
+<pre class="prettyprint lang-php">
+class post extends Base{
+	public function __construct(){
+		parent::__construct();
+	}
+
+	public function index(){
+			//work
+		}
+
+	public function hello(){
+	    echo “hello”;
+	}
+｝
+</pre>
+<p>
+同理，我们可以用地址：http://www.example.com/m/post/hello来访问它
+</p>
+<h2 class="content_h2">
+模板（view）
+</h2>
+<h3>
+创建模板
+</h3>
+<p>
+模板文件的扩展名是有规定的，必须是.htm，其它扩展名都不支持。当然，你可以通过模板类来修改它。模板都存放在/views目录下的各模板子目录。例如：默认模板目录为default。如果你需要更换模板，可以创建新的目录用于存放你的模板文件，那在调用的时候需指定模板目
+</p>
+<h3>
+调用模板
+</h3>
+<p>
+默认情况下，在控制器里，调用模板的方法如下：
+</p>
+<pre class="prettyprint lang-php">
+include $this->_template->load('index');
+</pre>
+<p>
+这里，告诉程序，调用的模板文件名称为index，省去了扩展名，模板目录则为默认模板目录default。若希望调用其它模板目录的文件，需加上模板目录名的参数
+</p>
+<pre class="prettyprint lang-php">
+include $this->_template->load('index',0,0,’newtemplate’);
+</pre>
+<p>
+语句中第4个参数为模板目录名，前两个参数为模板ID，一般情况下置0。
+</p>
+<h3>
+调用子模板
+</h3>
+<p>
+当需要在模板中调用模板的时候，可以使用subtemplate，方法如下：
+</p>
+<pre class="prettyprint lang-php">
+{subtemplate header}
+</pre>
+<p>
+后面直接跟模板的名称，如果是在模板根目录下的一个目录里，可带上目录的名字，如：
+</p>
+<pre class="prettyprint lang-php">
+{subtemplate subs:header}
+</pre>
+<h3>
+模板内数据应用
+</h3>
+<p>
+数据输出非常简单，只要是在调用模板的方法里被赋值的变量都可以直接在模板里调用输出，不需要再在做任何的操作
+</p>
+<h3>
+变量输出
+</h3>
+<p>
+使用｛｝来标明处理字段，意思就是说，变量需要用｛｝括起来。例如在控制器中给一个变量赋了值：
+</p>
+<pre class="prettyprint lang-php">
+$val=’HI,UnPHP’;
+</pre>
+<p>
+那在模板中，我们只需要这样写：
+</p>
+<pre class="prettyprint lang-html">
+&lt;div&gt;{$val}&lt;/div&gt;
+</pre>
+<h3>
+循环输出
+</h3>
+<p>
+使用&lt;!—{loop }—&gt;&lt;!—{/loop}—&gt;或直接用{loop}和{/loop}来做循环输出。例如控制器中有一个数组变量：
+</p>
+<pre class="prettyprint lang-php">
+$lists=array(
+	0=>array(
+	    ‘id’=>1,
+	    ‘name’=>’小王’,
+	),
+	1=>array(
+	    ‘id’=>2,
+	    ‘name’=>’小明’,
+	),
+)
+</pre>
+<p>
+那在模板中，我们需要这样写：
+</p>
+<pre class="prettyprint lang-html">
+&lt;table&gt;
+&lt;!—{loop $lists $val}—&gt;
+&lt;tr&gt;
+&lt;td&gt;{$val[‘id’]}&lt;/td&gt;
+&lt;td&gt;{$val[‘name’]}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;!—{/loop}—&gt;
+&lt;/table&gt;
+</pre>
+<h3>
+使用PHP函数或自定义函数
+</h3>
+<p>
+模板里也是可以直接使用PHP函数的，同样需要写在｛｝里面，但必须写上PHP的输入函数echo，如：
+</p>
+<pre class="prettyprint lang-php">
+{echo ‘123’;} //直接输出变量
+{echo date(‘Y-m-d’);}//输出年月日
+{echo count($array);}//输出数组长度
+{echo myfunction();}//输出自定义函数
+</pre>
+<h2 class="content_h2">
+数据类（data）
+</h2>
+<h3>
+创建数据类
+</h3>
+<p>
+框架将数据和控制器进行了关联，创建控制器必须创建数据类。我们先来看一个简单的例子：先创建一个控制器/app/controllers/post_controller.php，代码如前面,这时候，如果执行这个控制器，系统会提示未找到数据文件，要求你创建该文件，如：
+</p>
+<pre class="content_pre">
+Error: the model class is not exists,check the file : D:/web/yaoera/app/model/post_data.php
+</pre>
+<p>
+从这个提示中可以看出，我们需要在/app/model里创建post_data.php文件。接下来，我们创建/app/model/post_data.php文件
+</p>
+<pre class="prettyprint lang-php">
+class post_data extends Data{	
+	public function __construct(){
+		parent::__construct();
+	}
+}
+</pre>
+<p>
+所有的数据类都需要继承Data父类，Data类里定义了数据库的操作方法。和controller一样，类名就是数据类的文件名。接下来，你就可以在该类中创建数据方法
+</p>
+<pre class="prettyprint lang-php">
+public function getOneMember($uid){
+	//获取数据
+}
+</pre>
+<h3>
+通过数据类获取数据
+</h3>
+<p>
+数据类创建好后，我们就可以直接在对应的控制器里调用数据类方法来获取数据，如我们要调用1.10.1中的方法getOneMember
+</p>
+<pre class="prettyprint lang-php">
+$d=$this->_model->getOneMember('5');
+</pre>
+<h3>
+如何获取别的数据类
+</h3>
+<p>
+默认情况下，控制器只会创建对应的数据类对象，但若你想使用别的数据类，那就需要自己创建对象
+</p>
+<pre class="prettyprint lang-php">
+$user_data=new user_data();
+$b=$user_data->getUser(5);
+</pre>
+<h3>
+数据库操作
+</h3>
+<p>
+可以在/source/class/model.class.php中找到所有的方法
+</p>
+<h3>
+获取一条数据
+</h3>
+<pre class="prettyprint lang-php">
+$d=$this->_DB->find(‘members’,’first’,array(‘conditions’=>array(‘uid’=>5)));
+</pre>
+<p>
+这条语句将返回uid=5的用户的所有字段及数据。<br/>
+find方法有3个参数：<br/>
+第一个是表名称。可以使用as来为表改名如：members as m<br/>
+第二个是指明类型。如first代表单条数据<br/>
+第三个是数组，用于表示sql语句条件、排序、字段等内容<br/>
+</p>
+<h3>
+获取一组数据
+</h3>
+<p>
+同上，在获取一组数据的时候，只是第二个参数有变化，如：
+</p>
+<pre class="prettyprint lang-php">
+$d=$this->_DB->find(‘members’,’list’,array(‘conditions’=>array(‘uid>’=>5)));
+</pre>
+<p>
+这条语句将返回uid>5的所有用户数据
+</p>
+<h3>
+获取单个数据
+</h3>
+<p>
+有时候，我们只想取得一条数据里某个字段的数据，那么，我们就可以使用getone方法，如：
+</p>
+<pre class="prettyprint lang-php">
+$d=$this->_DB->getone(‘members’,array(‘field’=>’username’,’conditions’=>array(‘uid’=>5)));
+</pre>
+<p>
+getone只有2个参数，第一个同上，都是表名（在U框架的数据库操作方法中，第一个参数都代表表名称）。第二个参数是SQL语句构成，但区别与数据获取的是，它有一个必须的内容，就是field，注意不是复数，因为在其它几个方法中，这里是复数fields。它代表着我们要取的字段。
+</p>
+<h3>
+插入数据
+</h3>
+<pre class="prettyprint lang-php">
+$insert_id=$this->_DB->insert(‘members’,array(‘key’=>array(‘username’),’value’=>array(‘unphp’)));
+</pre>
+<h3>
+修改数据
+</h3>
+<pre class="prettyprint lang-php">
+$this->_DB->update(‘members’,array(‘fields’=>array(‘username’=>’abc’),’conditions’=>array(‘uid’=>5)));
+</pre>
+<h3>
+删除数据
+</h3>
+<pre class="prettyprint lang-php">
+$this->_DB->del(‘members’,array(‘conditions’=>array(‘uid’=>5)));
+</pre>
+<h2 class="content_h2">
+构造SQL语句
+</h2>
+<p>
+框架对SQL语句进行了构造，通过前面几个数据库的操作方法，相信你对基本的使用方法有了一定的了解，但SQL语句或许比较复杂，那我们要先来看看在构造SQL语句上的一些规定。<br/>
+SQL语句的构造，全都以数组的形式存在，且都有固定的key来代表，如条件语句：array(‘conditions’=>array(‘uid’=>5));conditions就代表着条件的含意，其后的数组则是它的值。那么，接下来我们先看看在查询中包含所有key的数组：
+</p>
+<pre class="prettyprint lang-php">
+array(
+	‘fields’=>array(‘uid’,’username’),
+	‘LEFT’=>array(
+	    ‘f’=>array(
+	    ‘table’=>’member_fields’,
+	    ‘ON’=>’f.uid=m.uid’,
+	),
+	),
+	‘conditions’=>array(
+	    ‘or’=>array(
+	    array(‘uid’=>5),
+	    array(‘uid’=>6),
+	),
+	‘date>’=>1,
+	‘date<=’=>10,
+	),
+	‘orders’=>array(‘id’=>’desc’),
+	‘limit’=>array(0,10),
+);
+</pre>
+<h3>
+条件语句
+</h3>
+<p>
+在SQL里，条件语句有可能比较复杂，但在目前的版本中，可能未涉及全面，那目前已经完成的有以下几个内容：<br/>
+1、and方法<br/>
+2、or方法<br/>
+3、=、!=、>、<、>=、<=、in、not in方法<br/>
+and方法不用特别指定，只要正常出现在conditions数组中，都是and关系，例如：
+</p>
+<pre class="prettyprint lang-php">
+conditions=>array(
+	‘uid’=>5,
+	‘uid’=>6,
+)
+</pre>
+<p>
+这样子即代表uid=5 and uid=6。<br/>
+从上面的例子和前面的例子已经可以看出=号的使用是不用指明的，但了除了=号，其它的赋值都需要指定符号，且符号需要跟在字段的下标里，如：
+</p>
+<pre class="prettyprint lang-php">
+conditions=>array(
+	‘uid!=’=>5,
+	‘uid>’=>5,
+	‘uid<’=>5,
+	‘uid>=’=>5,
+	‘uid<=’=>5,
+	‘uid in’=>’5,6’,
+	‘uid not in’=>’5,6’,
+)
+</pre>
+<p>
+这里特别要指出的是or(或)关系，or的写法在前面已有，基本上就是以or为下标的一个2维数组，里面数组即为or关系。但是or 必须要写在所有and关系的前面，意思就是说，如果你的条件中有or关系，conditions一开始就必须要写or，之后，才能写and，如：
+</p>
+<pre class="prettyprint lang-php">
+‘conditions’=>array(
+    ‘or’=>array(
+		array(‘uid’=>5),
+		array(‘uid’=>6),
+	),
+	‘date>’=>1,
+	‘date<=’=>10,
+)
+</pre>
+<p>
+此条件为：(uid=5 or uid=6) and date>1 and date<=10
+</p>
+<h3>
+联合查询
+</h3>
+<p>
+LEFT表示左联合查询的开始，第一个key值f，表示联合表的别名，之后的table表示表名，ON即关联字段。这里需要注意的是，主表需要写成members as m这样的别名形式
+</p>
+<pre class="prettyprint lang-php">
+‘LEFT’=>array(
+    ‘f’=>array(
+		‘table’=>’member_fields’,
+		‘ON’=>’f.uid=m.uid’,
+	),
+),
+</pre>
+<p>
+多表联合：
+</p>
+<pre class="prettyprint lang-php">
+‘LEFT’=>array(
+	‘f’=>array(
+		‘table’=>’member_fields’,
+		‘ON’=>’f.uid=m.uid’,
+	),
+	‘g’=>array(
+	    ‘table’=>’gold’,
+	    ‘ON’=>’g.uid=m.uid’,
+	),
+),
+</pre>
+<h3>
+排序、超始条数
+</h3>
+<p>
+排序是以orders开始，后面的数组表示排序的字段和方式，如：
+</p>
+<pre class="prettyprint lang-php">
+‘orders’=>array(‘id’=>’desc’),
+</pre>
+<p>
+代表：order by id desc，若有多个排序：
+</p>
+<pre class="prettyprint lang-php">
+‘orders’=>array(‘id’=>’desc’,’date’=>’asc’),
+</pre>
+<p>
+代表：order by id desc,date asc<br/>
+起始条数和orders基本上是一致的,limit开始，后面的数组表示开始条数和取多少条，如：
+</p>
+<pre class="prettyprint lang-php">
+‘limit’=>array(0,10),
+</pre>
+<p>
+代表：limit 0,10
+</p>
+<h3>
+获取数据条数
+</h3>
+<p>
+获取数据条数的方法是getrow，一个例子：
+</p>
+<pre class="prettyprint lang-php">
+$datanums=$this->getrows(‘members’,array(‘fields’=>array(‘count(*) as nums’),’conditions’=>array(‘uid>’=>5)));
+</pre>
+<p>
+那么这条语句的意思就是：select count(*) as nums from members where uid>5;返回的$datanums即为满足条件的数据数量。
+</p>
+<h3>
+分页查询
+</h3>
+<pre class="prettyprint lang-php">
+paginate ($table,$params=array(),$multi=null,$link=null);
+</pre>
+<p>
+$table	字符串	表名<br/>
+$params	数组	构造SQL语句<br/>
+$multi	整型数字	分页类型<br/>
+$link	字符	分页连接符
+</p>
+<p>返回值：</p>
+<p>
+array($list,$datanums,$multi);<br/>
+$list	数组	当前页结果数据<br/>
+$datanums	整数	结果总条数<br/>
+$multi	字符串	分页代码
+</p>
+<h2 class="content_h2">
+使用语言
+</h2>
+<p>
+框架在初始化时就已经应用了语言类，所以你只需要按规则建立语言文件，在模板里调用对应数据就可以了。
+</p>
+<h3>
+创建语言文件
+</h3>
+<p>
+语言文件需要存放在/app/language文件夹里，名字有格式要求，即：yourlanguage.lan.php。内容示例：
+</p>
+<pre class="prettyprint lang-php">
+return array(
+	'forget_pass'=>'忘记密码？',
+	'login_pass'=>'登录密码',
+	'login_email'=>'注册邮箱',
+	'login_text'=>'帐户登录',
+);
+</pre>
+<h3>
+语言配置
+</h3>
+<p>
+语言文件创建之后，接着我们就需要让系统知道，它应该调用哪个语言文件，所以，我们要对它进行配置。你可以在/app/configs里找到语言的配置文件lang.config.php，打开它：
+</p>
+<pre class="prettyprint lang-php">
+return array('lang' => 'simplified_chinese',);
+</pre>
+<p>
+非常清楚，真上你的语言文件名，保存就可以了
+</p>
+<h3>
+使用语言
+</h3>
+<p>
+基本上，我们只需要在模板里使用语言就可以了，当然还有可能会在控制器里使用，那么在模板里使用语言的方法如下：
+</p>
+<pre class="prettyprint lang-html">
+{lang login_text}
+</pre>
+<p>
+很简单，和模板里输出变量同理，只是用了lang进行，后面的字符串即为语言文件里对应的下标
+</p>
+<script type="text/javascript">
+jQuery(function($){
+	window.prettyPrint && prettyPrint();
+});
+</script>
