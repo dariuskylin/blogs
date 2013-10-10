@@ -53,3 +53,24 @@ baseurl: /primary_dir
 	* 推送到github：git push origin gh-pages
 </pre>
 推送结束后，等待一段时间（3-10分钟）就可以访问了
+<h2 class="content_h2">Some tips</h2>
+<h2>1、添加分类</h2>
+     添加分类是，只需要在yml开头的配置里面设置category选项即可
+     <p>
+	 <img src="{{ site:url }}/images/201310/20131003.jpg" alt="pic" />
+	 </p>
+     如果是多个分类，则需要用categories（category的复数），需要注意的是<font color="red">“-”后面有一个空格</font>
+     <p>
+	 <img src="{{ site:url }}/images/201310/20131004.jpg" alt="pic" />
+	 </p>
+    
+<h2>2、代码高亮</h2>
+    代码高亮使用pygments插件，使用方法很简单，只需要将代码放入“ {% highlight c++%} ”中间就可以，c++可以替换成c，java，php等。
+    <p>
+	<img src="{{ site:url }}/images/201310/20131005.jpg" alt="pic" />
+	</p>
+
+<h2>3、使用自己的域名</h2>
+    不使用github的域名，需要在主目录primary_dir下添加一个CNAME文件，里面指定自己的域名地址，push到github上；
+然后在域名管理里面添加一条A记录指向github pages的IP地址204.232.175.78，等待几分钟就可以了。
+
