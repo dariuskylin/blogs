@@ -26,3 +26,30 @@ keywords: github,jekyll,blog
                 |-- _posts       //日志文件目录
                 |-- index.html   //首页文件
 </pre>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;里面只有_config.yml是必需的，其他都可以自定义名称。所有的页面都是静态的，或者是html格式或者是markdown格式。
+根据github的要求，所有文件和目录的添加必须在gh-pages分支下执行，即在git init后，马上执行</p>
+<pre class="prettyprint lang-javascript">
+git checkout --orphan gh-pages
+</pre>
+<p>然后再创建子目录和文件</p>
+
+<h2 class="content_h2">_config.yml配置文件</h2>
+_config.yml是配置文件，它包含了很多的配置选项，具体可参看<a href="http://jekyllrb.com/docs/configuration/">官方文档</a>。
+_config.yml可以设置很多东西，但是如果不设置某个具体选项，那么该选项就使用默认设置，这样就比较省事了，可以仅写几个选项就可以了。baseurl是一个非常重要的选项，baseurl必须指定，用来表示主目录primary_dir
+<pre class="prettyprint lang-javascript">
+baseurl: /primary_dir
+</pre>
+（冒号后有一个空格）
+这是对github内部blog的设置方法，如果有自己的独立域名，那么baseurl只需要/，而不需要带目录。
+<h2 class="content_h2">github发布博客</h2>
+<pre class="prettyprint lang-javascript">
+	* 进入主目录primary_dir
+	* 初始化主目录：git init
+	* 切换到gh-pages分支：git checkout --orphan gh-pages
+	* 进行博客文件编辑
+	* 将要发布的内容加入到git：git add filename（如果要添加所有文件和目录，就用git add .）
+	* git本地提交：git commit -m ‘comment’（comment是备注）
+	* 添加远端git源：git remote add origin https://github.com/github用户名/博客项目名.git（只需要执行一次
+	* 推送到github：git push origin gh-pages
+</pre>
+推送结束后，等待一段时间（3-10分钟）就可以访问了
