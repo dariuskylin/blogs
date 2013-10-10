@@ -27,14 +27,14 @@ git init
                 |-- index.html   //首页文件
 </pre>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;里面只有_config.yml是必需的，其他都可以自定义名称。所有的页面都是静态的，或者是html格式或者是markdown格式。
-根据github的要求，所有文件和目录的添加必须在gh-pages分支下执行，即在git init后，马上执行
+根据github的要求，所有文件和目录的添加必须在gh-pages分支下执行，即在git init后，马上执行</p>
 <pre class="prettyprint">
 git checkout --orphan gh-pages
 </pre>
-然后再创建子目录和文件
-</p>
+<p>然后再创建子目录和文件</p>
+
 <h2 class="content_h2">_config.yml配置文件</h2>
-_config.yml是配置文件，它包含了很多的配置选项，具体可参看<a href="http://jekyllrb.com/docs/configuration/"官方文档</a>。
+_config.yml是配置文件，它包含了很多的配置选项，具体可参看<a href="http://jekyllrb.com/docs/configuration/">官方文档</a>。
 _config.yml可以设置很多东西，但是如果不设置某个具体选项，那么该选项就使用默认设置，这样就比较省事了，可以仅写几个选项就可以了。baseurl是一个非常重要的选项，baseurl必须指定，用来表示主目录primary_dir
 <pre class="prettyprint">
 baseurl: /primary_dir
