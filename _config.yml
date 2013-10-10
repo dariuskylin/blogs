@@ -1,4 +1,4 @@
-baseurl: /blogs
-url: http://www.ifdong.com
+baseurl: /
+url: http://www.ifdong.com/
 paginate: 10
 pygments: true
