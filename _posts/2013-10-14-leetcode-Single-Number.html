@@ -1,0 +1,39 @@
+---
+layout: post
+title: Leetcode----Single Number
+category: leetcode
+description: leetcode oj题目:Single Number;Given an array of integers, every element appears twice except for one. Find that single one.
+img: 201310/20131001.jpg
+keywords: leetcode, single number
+---
+
+<p>
+<img src="{{ site:url }}/images/201310/20131001.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+    Single Number
+</h2>
+<pre class="prettyprint">
+Given an array of integers, every element appears twice except for one. Find that single one.
+</br>
+Note:
+Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?</br>
+</pre>
+<h2 class="content_h2">分析 </h2>
+<p>题意是：给定一个数组，每个数字都出现了2次，只有一个数字出现1次，找出这个数字。</p>
+<p>很显然这个题目可以使用异或求解，因为任何一个数字异或它本身都是0，即A^A=0;而0和任何数字A异或都是A，0^A=A.</p>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+class Solution {
+public:
+    int singleNumber(int A[], int n) {
+    // Note: The Solution object is instantiated only once and is reused by each test case.
+    int ret = 0;
+    for(int i = 0; i < n; i++)
+    {
+        ret ^= A[i];
+    }
+    return ret;
+    }
+};
+{% endhighlight %}
