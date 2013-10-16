@@ -1,23 +1,46 @@
----
-layout: post
-title: github基于jekyll搭建个人博客
-categories: github
-description: 利用github和jekyll搭建一个个人博客，github托管，git方式管理。
-img: 201310/20131002.jpg
-keywords: github,jekyll,blog
----
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>github基于jekyll搭建个人博客 dariusdong's BLOG</title>
+        <meta name="keywords" content="github,jekyll,blogdariusdong,dongyuchi,blog,logs,博客"/>
+        <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
+		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
+        <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
+        <link href="http://www.ifdong.com/css/pygments.css" rel="stylesheet" type="text/css" />
+        <link href="/prettify/prettify.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/favicon.ico"/>
+		<link rel="bookmark" href="/favicon.ico"/>
+		<script type="text/javascript" src="/jquery.js"></script>
+		<script type="text/javascript" src="/prettify/prettify.js"></script>
+</head>
+<body>
+        <div class="wrap">
+		<div class="header radius black">
+			<h2><a href="http://www.ifdong.com">dariusdong's BLOG</a></h2>
+            <span class="right">
+                以俺多年种田的经验来看，神马都略懂一点，生活才多彩一点……猪葛亮说的……
+            </span>
+		</div>
 
-<p>
-<img src="{{ site:url }}/images/201310/20131002.jpg" alt="pic" />
+	<div class="main">
+		<div class="postbox radius">
+            <h2 class="first_title">github基于jekyll搭建个人博客</h2>
+            <p class="posted_info">
+                posted by 董三 on 2013-10-10 分类: <a href="http://www.ifdong.com/categorys/.html"></a>
+            </p>
+            <div class="postcontent">
+			<p>
+<img src="http://www.ifdong.com/images/201310/20131002.jpg" alt="pic" />
 </p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;博客地址是：<a href="http://dariuskylin.github.io/blogs/">http://dariuskylin.github.io/blogs/</a>或者<a href="http://www.ifdong.com">http://www.ifdong.com</a></p>
 
 &nbsp;&nbsp;&nbsp;&nbsp;在github搭建blog之前，当然需要有一个github账户；本机也要安装好git。
 <h2 class="content_h2">根目录文件结构</h2>
 &nbsp;&nbsp;&nbsp;&nbsp;选择一个空目录或者新建一个目录，用来作为主目录primary_dir，进入primary_dir执行
-{% highlight php %}  
-	git init
-{% endhighlight %}
+<div class="highlight"><pre><code class="php"><span class="x">  </span>
+<span class="x">	git init</span>
+</code></pre></div>
 <p>基本的文件结构应该是：</p>
 <pre class="brush: plain;">
 /primary_dir
@@ -57,21 +80,21 @@ baseurl: /primary_dir
 <h2>1、添加分类</h2>
      添加分类是，只需要在yml开头的配置里面设置category选项即可
      <p>
-	 <img src="{{ site:url }}/images/201310/20131003.jpg" alt="pic" />
+	 <img src="http://www.ifdong.com/images/201310/20131003.jpg" alt="pic" />
 	 </p>
      如果是多个分类，则需要用categories（category的复数），需要注意的是<font color="red">“-”后面有一个空格</font>
      <p>
-	 <img src="{{ site:url }}/images/201310/20131004.jpg" alt="pic" />
+	 <img src="http://www.ifdong.com/images/201310/20131004.jpg" alt="pic" />
 	 </p>
     
 <h2>2、代码高亮</h2>
     代码高亮使用pygments插件，使用方法很简单，只需要将代码放入
     <p>
-	<img src="{{ site:url }}/images/201310/20131006.jpg" alt="pic" />
+	<img src="http://www.ifdong.com/images/201310/20131006.jpg" alt="pic" />
 	</p>
     中间就可以，c++可以替换成c，java，php等。
     <p>
-	<img src="{{ site:url }}/images/201310/20131005.jpg" alt="pic" />
+	<img src="http://www.ifdong.com/images/201310/20131005.jpg" alt="pic" />
 	</p>
 
 <h2>3、使用自己的域名</h2>
@@ -100,3 +123,32 @@ baseurl: /primary_dir
 <li>http://taoxiaolei.cn/</li>
 <li>http://havee.me/</li>
 </ul>
+
+            </div>
+            
+    		<div class="likepost">
+    			<h2>相关日志</h2>
+    			<ul>
+    				
+    			</ul>
+    		</div>
+        <!-- UY BEGIN -->
+        <div id="uyan_frame"></div>
+        <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1850163"></script>
+        <!-- UY END -->
+	</div>
+		<div class="blank20"></div>
+                <div class="footer radius">
+                        &copy; 董三(dariusdong) 2013 Powered by GitHub <a href="https://github.com/mojombo/jekyll" target="_blank">jekyll</a>
+                </div>
+		<div style="display:none;">
+		<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F751292173225837a2688c4185dd750d6' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		</div>
+        </div>
+</body>
+</html>
+
+
