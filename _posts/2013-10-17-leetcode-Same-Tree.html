@@ -1,0 +1,59 @@
+---
+layout: post
+title: Leetcode----Same Tree
+category: leetcode
+description: leetcode oj题目:Same Tree; Given two binary trees, write a function to check if they are equal or not.
+img: 201310/20131001.jpg
+keywords: leetcode, Same Tree
+---
+
+<p>
+    <img src="{{ site:url }}/images/201310/20131001.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+    Same Tree
+</h2>
+<pre class="prettyprint">
+Given two binary trees, write a function to check if they are equal or not.<br/>
+Two binary trees are considered equal if they are structurally identical and the nodes have the same value.
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题意是：给定2颗二叉树，写一个检查这两颗二叉树是否相等的函数</p>
+<p>
+    对树的问题，递归总是一种思路。对于这个判断二叉树相等的问题，我们可以想象一下，如果两颗二叉树果真相等，那么他们的每个节点的val值肯定相等的，他们的左子树和右子树也肯定是相等的。而判断他们左子树和右子树是否相等，是一个递归子问题。
+</p>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isSameTree(TreeNode *p, TreeNode *q) {
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        if( !p && !q)
+            return true;
+        if( !p || !q)
+            return false;
+        if( p->val != q->val)
+            return false;
+        if( isSameTree(p->left, q->left) == false)
+            return false;
+        if( isSameTree(p->right, q->right) == false)
+            return false;
+        return true;
+    }
+};
+{% endhighlight %}
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>
