@@ -23,7 +23,7 @@ Your algorithm should have a linear runtime complexity. Could you implement it w
 <p>题意是：给定一个数组，每个数字都出现了2次，只有一个数字出现1次，找出这个数字。</p>
 <p>很显然这个题目可以使用异或求解，因为任何一个数字异或它本身都是0，即A^A=0;而0和任何数字A异或都是A，0^A=A.</p>
 <h2 class="content_h2">Code</h2>
-{% highlight c %}
+{% highlight c++ %}
 class Solution {
 public:
     int singleNumber(int A[], int n) {
