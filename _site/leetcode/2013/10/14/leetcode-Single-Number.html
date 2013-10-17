@@ -46,7 +46,7 @@ Your algorithm should have a linear runtime complexity. Could you implement it w
 <p>题意是：给定一个数组，每个数字都出现了2次，只有一个数字出现1次，找出这个数字。</p>
 <p>很显然这个题目可以使用异或求解，因为任何一个数字异或它本身都是0，即A^A=0;而0和任何数字A异或都是A，0^A=A.</p>
 <h2 class="content_h2">Code</h2>
-<div class="highlight"><pre><code class="c"><span class="n">class</span> <span class="n">Solution</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="nl">public:</span>
     <span class="kt">int</span> <span class="n">singleNumber</span><span class="p">(</span><span class="kt">int</span> <span class="n">A</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Note: The Solution object is instantiated only once and is reused by each test case.</span>
@@ -71,6 +71,8 @@ Your algorithm should have a linear runtime complexity. Could you implement it w
     		<div class="likepost">
     			<h2>相关日志</h2>
     			<ul>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/10/17/leetcode-Maximum-Depth-of-Binary-Tree.html">Leetcode----Maximum Depth of Binary Tree</a></li>
     				
     				<li><a href="http://www.ifdong.com/leetcode/2013/10/14/leetcode-Single-Number.html">Leetcode----Single Number</a></li>
     				
