@@ -64,7 +64,6 @@ public:
         	if(slower == faster)  // 快指针反超慢指针，快慢指针都指向一个节点，有环。
         		return true;
         }
-		// 判断一下推出while循环的条件
         if(slower != NULL && slower == faster)    
         	return true;
         return false;
