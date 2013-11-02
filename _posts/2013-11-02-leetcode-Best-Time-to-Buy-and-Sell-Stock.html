@@ -46,17 +46,17 @@ public:
         // IMPORTANT: Please reset any member data you declared, as
         // the same Solution instance will be reused for each test case.
         if(prices.size() < 2)
-        	return 0;
+            return 0;
         int max = 0;
         for(int i = 0; i < prices.size() -1; i++)
         {
-        	for(int j = i + 1; j < prices.size(); j++)
-        	{
-        		if(prices[i] - prices[j] > max)
-        		{
-        			max = prices[i] - prices[j];
-        		} 
-        	}
+            for(int j = i + 1; j < prices.size(); j++)
+            {
+                if(prices[i] - prices[j] > max)
+                {
+                    max = prices[i] - prices[j];
+                } 
+            }
         }
         return max;
     }
@@ -72,7 +72,7 @@ class Solution {
          * 我们考虑添加一个额外数组maxN用来存储最大卖价
          * 这个最大卖价是逆序推导的，从pos=prices.size()-1,开始，一只到0结束
          * maxN[pos]表示prices[pos]到prices[prices.size()-1]这几天的最大卖价，
-		 * prices[pos]是这一天的买价，那么二者相减，就是收益
+         * prices[pos]是这一天的买价，那么二者相减，就是收益
          * */
         int maxProfit(vector<int> &prices) {
             // IMPORTANT: Please reset any member data you declared, as
@@ -81,7 +81,7 @@ class Solution {
                 return 0;
             vector<int> maxN(prices.size(), 0);
             int max = 0;
-			//注意是逆序，这是求出pos——prices.size()之间的最大卖价
+            //注意是逆序，这是求出pos——prices.size()之间的最大卖价
             for(int pos = prices.size() - 1; pos >= 0; pos--)
             {
                 max = max < prices[pos]?prices[pos]:max;
