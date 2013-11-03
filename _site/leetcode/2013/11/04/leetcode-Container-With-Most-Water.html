@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Leetcode----Container With Most Water dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Container With Most Waterdariusdong,dongyuchi,blog,logs,博客"/>
+        <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
+		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
+        <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
+        <link href="http://www.ifdong.com/css/pygments.css" rel="stylesheet" type="text/css" />
+        <link href="/prettify/prettify.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/favicon.ico"/>
+		<link rel="bookmark" href="/favicon.ico"/>
+		<script type="text/javascript" src="/jquery.js"></script>
+		<script type="text/javascript" src="/prettify/prettify.js"></script>
+</head>
+<body>
+        <div class="wrap">
+		<div class="header radius black">
+			<h2><a href="http://www.ifdong.com">dariusdong's BLOG</a></h2>
+            <span class="right">
+                以俺多年种田的经验来看，神马都略懂一点，生活才多彩一点……猪葛亮说的……
+            </span>
+		</div>
+
+	<div class="main">
+		<div class="postbox radius">
+            <h2 class="first_title">Leetcode----Container With Most Water</h2>
+            <p class="posted_info">
+                posted by 董三 on 2013-11-04 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
+            </p>
+            <div class="postcontent">
+			<p>
+    <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+    Container With Most Water 
+</h2>
+<pre class="prettyprint">
+Given n non-negative integers a1, a2, ..., an, where each represents a point at coordinate (i, ai). n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water.
+
+Note: You may not slant the container.
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题意是：给出一个整形数组a1，a2...，an，数组的每个元素表示一个坐标(i, ai)。对每个坐标(i, ai)和(i, 0)，连接一条线，n个元素就有n条线，再加上X坐标轴构成了一个容器。要求找到两条竖线，使之和X轴构成的小容器能够容纳最多的水。</p>
+<p>
+    要理解题意，必须先意识到水的特点是总是保持一个矩形，以最小的height那条边作为矩形的高。
+</p>
+<pre class="prettyprint">
+     * 这是一道双指针/滑动窗口的题型，即利用两个指针对一个数组或链表进行扫描。
+     * 扫描方式有以不同速度从头向尾扫描，或者分别从头和尾向中间扫描。
+     * 这道题最简单的做法是用第一种扫描方式，两层for循环，复杂度O(N^2),但是leetcode判断超时；
+     * AC的解法使用了分别从头和尾向中间扫描的方式，复杂度为O(N),需要注意的是判断终止条件。
+</pre>
+
+<p>
+<ul>编程实现两种复杂度的算法：O(N*N)和O(N)<br/>
+</ul>
+</p>
+<h2 class="content_h2">Code</h2>
+<h3>Code 1:O(N*N)算法(Time Limit Exceeded)</h3>
+<div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="cm">/* </span>
+<span class="cm">     * 因为水的特性，在容器里总是以矩形存在的，所以最小的height才是高</span>
+<span class="cm">     * 最简单的方法是设置两层for循环，枚举所有的左边height和右边height，求出所有面积，得出最大面积。</span>
+<span class="cm">     * 这个算法复杂度O(N^2)，leetcode平台判断为Time Limit Exceeded超时。</span>
+<span class="cm">     * */</span>
+    <span class="kt">int</span> <span class="n">maxArea</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">height</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
+        <span class="c1">// the same Solution instance will be reused for each test case.</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">height</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span>
+        	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">maxArea</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">tempArea</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">height</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">left</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+        	<span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="n">height</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">right</span><span class="o">++</span><span class="p">)</span>
+        	<span class="p">{</span>
+        		<span class="n">tempArea</span> <span class="o">=</span><span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">(</span><span class="n">height</span><span class="p">[</span><span class="n">left</span><span class="p">],</span> <span class="n">height</span><span class="p">[</span><span class="n">right</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">);</span>
+        		<span class="k">if</span><span class="p">(</span><span class="n">tempArea</span> <span class="o">&gt;</span> <span class="n">maxArea</span><span class="p">)</span>
+        			<span class="n">maxArea</span> <span class="o">=</span> <span class="n">tempArea</span><span class="p">;</span>
+        	<span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">maxArea</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<br/>
+<h3>Code 2:O(N)算法(Accepted)</h3>
+<div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="cm">/* </span>
+<span class="cm">     * 这是一道双指针/滑动窗口的题型，即利用两个指针对一个数组或链表进行扫描。</span>
+<span class="cm">     * 扫描方式有以不同速度从头向尾扫描，或者分别从头和尾向中间扫描。</span>
+<span class="cm">     * 这道题最简单的做法是用第一种扫描方式，两层for循环，复杂度O(N^2),但是leetcode判断超时；</span>
+<span class="cm">     * 下面的解法使用了分别从头和尾向中间扫描的方式，复杂度为O(N),需要注意的是判断终止条件。</span>
+<span class="cm">     *</span>
+<span class="cm">     * */</span>
+    <span class="kt">int</span> <span class="n">maxArea</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">height</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
+        <span class="c1">// the same Solution instance will be reused for each test case.</span>
+    	<span class="k">if</span><span class="p">(</span><span class="n">height</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span>
+    		<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    	<span class="kt">int</span> <span class="n">maxArea</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
+    	<span class="kt">int</span> <span class="n">tempArea</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    	<span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">height</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    	<span class="k">while</span><span class="p">(</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">)</span>
+    	<span class="p">{</span>
+            <span class="c1">//水的特点是总是保持一个矩形，以最小的height那条边作为矩形的高</span>
+    		<span class="n">tempArea</span> <span class="o">=</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span><span class="o">*</span><span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">(</span><span class="n">height</span><span class="p">[</span><span class="n">left</span><span class="p">],</span> <span class="n">height</span><span class="p">[</span><span class="n">right</span><span class="p">]);</span>
+    		<span class="n">maxArea</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">tempArea</span><span class="p">,</span> <span class="n">maxArea</span><span class="p">);</span>
+
+            <span class="c1">//这是整段代码的关键点，指针的移动条件</span>
+    		<span class="k">if</span><span class="p">(</span><span class="n">height</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">height</span><span class="p">[</span><span class="n">right</span><span class="p">])</span>
+    			<span class="n">left</span><span class="o">++</span><span class="p">;</span>
+    		<span class="k">else</span>
+    			<span class="n">right</span><span class="o">--</span><span class="p">;</span>
+    	<span class="p">}</span>
+    	<span class="k">return</span> <span class="n">maxArea</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="http://www.ifdong.com/images/download.jpg" alt="pic" />
+    </a>
+</p>
+
+            </div>
+            
+    		<div class="likepost">
+    			<h2>相关日志</h2>
+    			<ul>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/04/leetcode-Container-With-Most-Water.html">Leetcode----Container With Most Water</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/03/leetcode-Plus-One.html">Leetcode----Plus One</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/03/leetcode-Best-Time-to-Buy-and-Sell-Stock-II.html">Leetcode----Best Time to Buy and Sell Stock II</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/03/leetcode-Best-Time-to-Buy-and-Sell-Stock.html">Leetcode----Best Time to Buy and Sell Stock</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/01/leetcode-Linked-List-Cycle.html">Leetcode----Linked List Cycle</a></li>
+    				
+    			</ul>
+    		</div>
+        <!-- UY BEGIN -->
+        <div id="uyan_frame"></div>
+        <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1850163"></script>
+        <!-- UY END -->
+	</div>
+		<div class="blank20"></div>
+                <div class="footer radius">
+                        &copy; 董三(dariusdong) 2013 Powered by GitHub <a href="https://github.com/mojombo/jekyll" target="_blank">jekyll</a>
+                </div>
+		<div style="display:none;">
+		<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F751292173225837a2688c4185dd750d6' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		</div>
+        </div>
+</body>
+</html>
+
+
