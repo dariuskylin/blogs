@@ -1,0 +1,70 @@
+---
+layout: post
+title: Leetcode----Remove Duplicates from Sorted Array
+category: leetcode
+description: leetcode oj题目:Remove Duplicates from Sorted Array; Given a sorted array, remove the duplicates in place such that each element appear only once and return the new length.Do not allocate extra space for another array, you must do this in place with constant memory. 
+img: 201311/20131101.jpg
+keywords: leetcode, Remove Duplicates from Sorted Array
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+    Remove Duplicates from Sorted Array
+</h2>
+<pre class="prettyprint">
+Given a sorted array, remove the duplicates in place such that each element appear only once and return the new length.
+
+Do not allocate extra space for another array, you must do this in place with constant memory. 
+
+For example,
+ Given input array A = [1,1,2], 
+
+Your function should return length = 2, and A is now [1,2].
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题目的意思是，给定一个排序的整数数组，在数组中去除重复的元素，使原数组所有元素都仅出现1次，并返回元素的个数.</p>
+<pre class="prettyprint">
+    *题目已经要求不能使用额外空间，所以借助堆栈和其他数组的方法都不可行。
+    *设置两个指针，一个负责遍历输入数组的每个元素，一个指向去重后数组的元素。
+</pre>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+class Solution {
+public:
+    /* 
+     * 设置两个指针，一个指针负责遍历输入数组所有pos，一个指针负责指向去重后的数组pos
+     *
+     * */
+    int removeDuplicates(int A[], int n) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        if( !A || n <= 0)
+            return 0;
+        int ret = 1;
+        int i = 0; 
+        int j = i + 1; 
+        while( j < n )
+        {
+            if( A[i] == A[j])
+                j++;
+            else
+            {
+                ret++;
+                // 给去重后的数组元素赋值
+                A[i + 1] = A[j];
+                i++, j++;
+            }
+
+        }
+        return ret;
+    }
+};
+{% endhighlight %}
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>
