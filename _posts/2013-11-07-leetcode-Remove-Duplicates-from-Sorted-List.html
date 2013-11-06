@@ -1,0 +1,73 @@
+---
+layout: post
+title: Leetcode----Remove Duplicates from Sorted List
+category: leetcode
+description: leetcode oj题目:Given a sorted linked list, delete all duplicates such that each element appear only once. 
+img: 201311/20131101.jpg
+keywords: leetcode, Remove Duplicates from Sorted List
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Remove Duplicates from Sorted List
+</h2>
+<pre class="prettyprint">
+Given a sorted linked list, delete all duplicates such that each element appear only once. 
+
+For example,
+ Given 1->1->2, return 1->2.
+ Given 1->1->2->3->3, return 1->2->3. 
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题目的意思是，给定一个排序的链表，删除所有的重复节点，返回新链表.</p>
+<pre class="prettyprint">
+     * 思路比较简单，遍历所有结点，如果当前结点的下一个节点值与当前
+     * 节点值相等，那么删除下个节点；如果不相等，则将当前指针指向下
+     * 一个节点。
+     * 当当前指针指向最后一个节点时就是循环终止条件。
+</pre>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    /* 
+     * 思路比较简单，遍历所有结点，如果当前结点的下一个节点值与当前
+     * 节点值相等，那么删除下个节点；如果不相等，则将当前指针指向下
+     * 一个节点。
+     * 当当前指针指向最后一个节点时就是循环终止条件。
+     * */
+    ListNode *deleteDuplicates(ListNode *head) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        if(!head || head->next == NULL)
+            return head;
+        ListNode *ptr = head;
+        while(ptr && ptr->next)
+        {
+            if(ptr->next->val == ptr->val)
+            {
+                ptr->next = ptr->next->next;
+            }
+            else
+                ptr = ptr->next;
+        }
+        return head;
+    }
+};
+{% endhighlight %}
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>
