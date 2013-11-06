@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Leetcode----Longest Substring Without Repeating Characters dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Longest Substring Without Repeating Charactersdariusdong,dongyuchi,blog,logs,博客"/>
+        <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
+		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
+        <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
+        <link href="http://www.ifdong.com/css/pygments.css" rel="stylesheet" type="text/css" />
+        <link href="/prettify/prettify.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/favicon.ico"/>
+		<link rel="bookmark" href="/favicon.ico"/>
+		<script type="text/javascript" src="/jquery.js"></script>
+		<script type="text/javascript" src="/prettify/prettify.js"></script>
+</head>
+<body>
+        <div class="wrap">
+		<div class="header radius black">
+			<h2><a href="http://www.ifdong.com">dariusdong's BLOG</a></h2>
+            <span class="right">
+                以俺多年种田的经验来看，神马都略懂一点，生活才多彩一点……猪葛亮说的……
+            </span>
+		</div>
+
+	<div class="main">
+		<div class="postbox radius">
+            <h2 class="first_title">Leetcode----Longest Substring Without Repeating Characters</h2>
+            <p class="posted_info">
+                posted by 董三 on 2013-11-06 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
+            </p>
+            <div class="postcontent">
+			<p>
+    <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+    Longest Substring Without Repeating Characters
+</h2>
+<pre class="prettyprint">
+Given a string, find the length of the longest substring without repeating characters. For example, the longest substring without repeating letters for "abcabcbb" is "abc", which the length is 3. For "bbbbb" the longest substring is "b", with the length of 1.
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题目的意思是，给定一个字符串，找出最大非重复的子串长度.</p>
+<pre class="prettyprint">
+    * 设置两个位置指针@begin和@pos，@begin指向子串的起始，@pos指向子串的终点
+    * 1、初始@begin和@pos都指向0，然后@pos渐增；
+    * 2、判断@pos的位置的字符是否出现过；
+    * 3、如果@pos位置的字符没有出现过，标记这个字符已经出现过，@pos指向下一个位置；
+    * 4、如果@pos位置的字符已经出现过，情况就比较复杂，因为这时候，我们需要重新设置@begin
+    *    的位置。我们先记录下这个@begin和@pos之间的子串的长度，留作最大值比较。
+    *    那么@begin的位置应该设置在哪里？很显然是@pos指向的字符之前所在的位置！
+    *    我们找到这个位置，将它赋值给@begin，同时将在@begin的新位置和旧位置之间
+    *    的字符都设置为没出现过。
+    * 5、一直到@pos指向字符串的末尾，计算出最后一次最大值。因为这对应着最大子串就是
+    *    输入字符串的末尾子串这种特殊情况
+</pre>
+<h2 class="content_h2">Code</h2>
+<div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="nl">public:</span>
+        <span class="cm">/* </span>
+<span class="cm">         * 设置两个位置指针@begin和@pos，@begin指向子串的起始，@pos指向子串的终点</span>
+<span class="cm">         * 1、初始@begin和@pos都指向0，然后@pos渐增；</span>
+<span class="cm">         * 2、判断@pos的位置的字符是否出现过；</span>
+<span class="cm">         * 3、如果@pos位置的字符没有出现过，标记这个字符已经出现过，@pos指向下一个位置；</span>
+<span class="cm">         * 4、如果@pos位置的字符已经出现过，情况就比较复杂，因为这时候，我们需要重新设置@begin</span>
+<span class="cm">         *    的位置。我们先记录下这个@begin和@pos之间的子串的长度，留作最大值比较。</span>
+<span class="cm">         *    那么@begin的位置应该设置在哪里？很显然是@pos指向的字符之前所在的位置！</span>
+<span class="cm">         *    我们找到这个位置，将它赋值给@begin，同时将在@begin的新位置和旧位置之间</span>
+<span class="cm">         *    的字符都设置为没出现过。</span>
+<span class="cm">         * 5、一直到@pos指向字符串的末尾，计算出最后一次最大值。因为这对应着最大子串就是</span>
+<span class="cm">         *    输入字符串的末尾子串这种特殊情况</span>
+<span class="cm">         * */</span>
+        <span class="kt">int</span> <span class="n">lengthOfLongestSubstring</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
+            <span class="c1">// the same Solution instance will be reused for each test case.</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+            <span class="c1">// @flagMap做hash作用，保存字符是否已经判断过。</span>
+            <span class="kt">bool</span> <span class="n">flagMap</span><span class="p">[</span><span class="mi">256</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+            <span class="c1">// @count用于保存返回结果（最大长度）</span>
+            <span class="kt">int</span> <span class="n">count</span><span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="c1">//begin指向子串的起点位置</span>
+            <span class="kt">int</span> <span class="n">begin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="c1">//枚举所有子串的结束位置，与begin呼应</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">pos</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">flagMap</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">]]</span> <span class="p">)</span>
+                    <span class="n">flagMap</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">pos</span> <span class="o">-</span> <span class="n">begin</span><span class="p">);</span>
+                    <span class="c1">// 当@pos指向了重复字符时，在begin-pos之间找到这个重复字符</span>
+                    <span class="c1">// 将这个字符位置和@begin之间的字符的flagMap标志位都reset</span>
+                    <span class="k">while</span><span class="p">(</span> <span class="n">s</span><span class="p">[</span><span class="n">begin</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
+                        <span class="n">flagMap</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">begin</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                        <span class="n">begin</span><span class="o">++</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="n">begin</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="c1">// 最后一步还需要判断一次最大值，这是对应于最大长度非重复子串位于字符串末尾的特殊情况</span>
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">begin</span><span class="p">));</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="http://www.ifdong.com/images/download.jpg" alt="pic" />
+    </a>
+</p>
+
+            </div>
+            
+    		<div class="likepost">
+    			<h2>相关日志</h2>
+    			<ul>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/06/leetcode-Longest-Substring-Without-Repeating-Characters.html">Leetcode----Longest Substring Without Repeating Characters</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/04/leetcode-Remove-Duplicates-from-Sorted-Array.html">Leetcode----Remove Duplicates from Sorted Array</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/04/leetcode-Container-With-Most-Water.html">Leetcode----Container With Most Water</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/03/leetcode-Plus-One.html">Leetcode----Plus One</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/03/leetcode-Best-Time-to-Buy-and-Sell-Stock-II.html">Leetcode----Best Time to Buy and Sell Stock II</a></li>
+    				
+    			</ul>
+    		</div>
+        <!-- UY BEGIN -->
+        <div id="uyan_frame"></div>
+        <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1850163"></script>
+        <!-- UY END -->
+	</div>
+		<div class="blank20"></div>
+                <div class="footer radius">
+                        &copy; 董三(dariusdong) 2013 Powered by GitHub <a href="https://github.com/mojombo/jekyll" target="_blank">jekyll</a>
+                </div>
+		<div style="display:none;">
+		<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F751292173225837a2688c4185dd750d6' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		</div>
+        </div>
+</body>
+</html>
+
+
