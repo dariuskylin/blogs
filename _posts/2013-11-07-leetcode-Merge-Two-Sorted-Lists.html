@@ -1,0 +1,91 @@
+---
+layout: post
+title: Leetcode----Merge Two Sorted Lists
+category: leetcode
+description: leetcode oj题目:Merge Two Sorted Lists; Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the nodes of the first two lists.
+img: 201311/20131101.jpg
+keywords: leetcode, Merge Two Sorted Lists
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Merge Two Sorted Lists
+</h2>
+<pre class="prettyprint">
+Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the nodes of the first two lists.
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题目的意思是，合并两个已排序的链表生成一个新链表，要求新链表的节点都是两个输入链表的节点。</p>
+
+<pre class="prettyprint">
+    方法很简单，维护两个指针分别从头开始遍历链表，逐次比较两个节点的大小，将较小节点放入新链表。而较小节点所在的链表的指针则指向下一个元素，另一个链表的指针不动；当其中一个链表遍历结束后，将另一个链表的节点顺序放入新链表，返回新链表头指针。
+    Note：需要注意的是，Head指针的赋值~
+</pre>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *mergeTwoLists(ListNode *l1, ListNode *l2) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        if( !l1 )   return l2;
+        if( !l2 )   return l1;
+        ListNode *head = NULL, *ptr = NULL;
+        // 为了不破坏输入的l1和l2指针，另外声明指针分别指向l1和l2
+        ListNode *lptr = l1, *rptr = l2;
+        // 遍历l1和l2的所有节点元素，知道其中一个链表遍历完
+        while(lptr && rptr)
+        {
+            if(lptr->val <= rptr->val)
+            {
+                // 若head节点还没赋值，则赋值
+                if( !head )
+                    head = lptr, ptr = lptr;
+                else
+                    ptr->next = lptr, ptr = ptr->next;
+                lptr = lptr->next;
+            }
+            else
+            {
+                // 若head节点还没赋值，则赋值
+                if( !head )
+                    head = rptr, ptr = rptr;
+                else
+                    ptr->next = rptr, ptr = ptr->next;
+                rptr = rptr->next;
+            }
+        }
+        // 当while循环结束后，第一个链表还有剩余节点
+        while( lptr)
+        {
+            ptr->next = lptr;
+            ptr = ptr->next;
+            lptr = lptr->next;
+        }
+        // 当while循环结束后，第二个链表还有剩余节点
+        while( rptr)
+        {
+            ptr->next = rptr;
+            ptr = ptr->next;
+            rptr = rptr->next;
+        }
+        return head;
+    }
+};
+{% endhighlight %}
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>

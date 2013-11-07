@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Leetcode----Two Sum dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Two Sumdariusdong,dongyuchi,blog,logs,博客"/>
+        <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
+		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
+        <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
+        <link href="http://www.ifdong.com/css/pygments.css" rel="stylesheet" type="text/css" />
+        <link href="/prettify/prettify.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/favicon.ico"/>
+		<link rel="bookmark" href="/favicon.ico"/>
+		<script type="text/javascript" src="/jquery.js"></script>
+		<script type="text/javascript" src="/prettify/prettify.js"></script>
+</head>
+<body>
+        <div class="wrap">
+		<div class="header radius black">
+			<h2><a href="http://www.ifdong.com">dariusdong's BLOG</a></h2>
+            <span class="right">
+                以俺多年种田的经验来看，神马都略懂一点，生活才多彩一点……猪葛亮说的……
+            </span>
+		</div>
+
+	<div class="main">
+		<div class="postbox radius">
+            <h2 class="first_title">Leetcode----Two Sum</h2>
+            <p class="posted_info">
+                posted by 董三 on 2013-11-07 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
+            </p>
+            <div class="postcontent">
+			<p>
+    <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Two Sum
+</h2>
+<pre class="prettyprint">
+Given an array of integers, find two numbers such that they add up to a specific target number.
+
+The function twoSum should return indices of the two numbers such that they add up to the target, where index1 must be less than index2. Please note that your returned answers (both index1 and index2) are not zero-based.
+
+You may assume that each input would have exactly one solution.
+
+Input: numbers={2, 7, 11, 15}, target=9
+Output: index1=1, index2=2 
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题目的意思是，给定一个整形数组,找到其中两个元素相加是特定值，返回这两个元素的下标.</p>
+
+<pre class="prettyprint">
+     * 对于未排序的数组来说，设置两层for循环遍历是首先可以想到的方法，复杂度为O(N^2)
+     * 将未排序的数组排序后再求twosum，可以优化到O(NlogN)复杂度：
+     * 新建一个结构体  struct Node {int val; int seq;}；seq用来存储val在原数组的下标
+     * 将Node数组排序后，设置两个指针分别指向数组首元素和尾元素，判断两个指针的Node的val和
+     * 是否等于target，等于则按照seq从小到大存到返回数组，小于target，那么将首元素指针右移；
+     * 大于target，则将尾元素指针左移；循环终止条件是首指针和尾指针相遇。
+</pre>
+<h2 class="content_h2">Code</h2>
+<div class="highlight"><pre><code class="c++"><span class="k">struct</span> <span class="n">Node</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">seq</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="kt">bool</span> <span class="nf">compare</span><span class="p">(</span><span class="n">Node</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">Node</span> <span class="n">rhs</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">lhs</span><span class="p">.</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">rhs</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="cm">/* </span>
+<span class="cm">     * 对于未排序的数组来说，设置两层for循环遍历是首先可以想到的方法，复杂度为O(N^2)</span>
+<span class="cm">     * 将未排序的数组排序后再求twosum，可以优化到O(NlogN)复杂度：</span>
+<span class="cm">     * 新建一个结构体  struct Node {int val; int seq;}；seq用来存储val在原数组的下标</span>
+<span class="cm">     * 将Node数组排序后，设置两个指针分别指向数组首元素和尾元素，判断两个指针的Node的val和</span>
+<span class="cm">     * 是否等于target，等于则按照seq从小到大存到返回数组，小于target，那么将首元素指针右移；</span>
+<span class="cm">     * 大于target，则将尾元素指针左移；循环终止条件是首指针和尾指针相遇。</span>
+<span class="cm">     * */</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">twoSum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">numbers</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
+        <span class="c1">// the same Solution instance will be reused for each test case.</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">indexs</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">numbers</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">indexs</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;</span> <span class="n">Nodes</span><span class="p">(</span><span class="n">numbers</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">numbers</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">idx</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">Nodes</span><span class="p">[</span><span class="n">idx</span><span class="p">].</span><span class="n">val</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">Nodes</span><span class="p">[</span><span class="n">idx</span><span class="p">].</span><span class="n">seq</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="c1">// 排序，复杂度O(NlogN)</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">sort</span><span class="p">(</span><span class="n">Nodes</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">Nodes</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">compare</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">lptr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rptr</span> <span class="o">=</span> <span class="n">Nodes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">tempSum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">lptr</span> <span class="o">&lt;</span> <span class="n">rptr</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">tempSum</span> <span class="o">=</span> <span class="n">Nodes</span><span class="p">[</span><span class="n">lptr</span><span class="p">].</span><span class="n">val</span> <span class="o">+</span> <span class="n">Nodes</span><span class="p">[</span><span class="n">rptr</span><span class="p">].</span><span class="n">val</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span> <span class="n">tempSum</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">// 返回的两个下标需要从小到大排序</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">Nodes</span><span class="p">[</span><span class="n">lptr</span><span class="p">].</span><span class="n">seq</span> <span class="o">&lt;</span> <span class="n">Nodes</span><span class="p">[</span><span class="n">rptr</span><span class="p">].</span><span class="n">seq</span><span class="p">)</span>
+                    <span class="n">indexs</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">Nodes</span><span class="p">[</span><span class="n">lptr</span><span class="p">].</span><span class="n">seq</span><span class="p">),</span> <span class="n">indexs</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">Nodes</span><span class="p">[</span><span class="n">rptr</span><span class="p">].</span><span class="n">seq</span><span class="p">);</span>
+                <span class="k">else</span>
+                    <span class="n">indexs</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">Nodes</span><span class="p">[</span><span class="n">rptr</span><span class="p">].</span><span class="n">seq</span><span class="p">),</span> <span class="n">indexs</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">Nodes</span><span class="p">[</span><span class="n">lptr</span><span class="p">].</span><span class="n">seq</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">tempSum</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">)</span>
+                <span class="n">lptr</span><span class="o">++</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">rptr</span><span class="o">--</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">indexs</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="http://www.ifdong.com/images/download.jpg" alt="pic" />
+    </a>
+</p>
+
+            </div>
+            
+    		<div class="likepost">
+    			<h2>相关日志</h2>
+    			<ul>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/07/leetcode-Two-Sum.html">Leetcode----Two Sum</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/07/leetcode-Search-Insert-Position.html">Leetcode----Search Insert Position</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/07/leetcode-Remove-Duplicates-from-Sorted-List.html">Leetcode----Remove Duplicates from Sorted List</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/07/leetcode-Merge-Two-Sorted-Lists.html">Leetcode----Merge Two Sorted Lists</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/06/leetcode-Longest-Substring-Without-Repeating-Characters.html">Leetcode----Longest Substring Without Repeating Characters</a></li>
+    				
+    			</ul>
+    		</div>
+        <!-- UY BEGIN -->
+        <div id="uyan_frame"></div>
+        <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1850163"></script>
+        <!-- UY END -->
+	</div>
+		<div class="blank20"></div>
+                <div class="footer radius">
+                        &copy; 董三(dariusdong) 2013 Powered by GitHub <a href="https://github.com/mojombo/jekyll" target="_blank">jekyll</a>
+                </div>
+		<div style="display:none;">
+		<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F751292173225837a2688c4185dd750d6' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		</div>
+        </div>
+</body>
+</html>
+
+

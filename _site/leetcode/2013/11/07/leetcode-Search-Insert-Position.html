@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Leetcode----Search Insert Position dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Search Insert Positiondariusdong,dongyuchi,blog,logs,博客"/>
+        <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
+		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
+        <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
+        <link href="http://www.ifdong.com/css/pygments.css" rel="stylesheet" type="text/css" />
+        <link href="/prettify/prettify.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/favicon.ico"/>
+		<link rel="bookmark" href="/favicon.ico"/>
+		<script type="text/javascript" src="/jquery.js"></script>
+		<script type="text/javascript" src="/prettify/prettify.js"></script>
+</head>
+<body>
+        <div class="wrap">
+		<div class="header radius black">
+			<h2><a href="http://www.ifdong.com">dariusdong's BLOG</a></h2>
+            <span class="right">
+                以俺多年种田的经验来看，神马都略懂一点，生活才多彩一点……猪葛亮说的……
+            </span>
+		</div>
+
+	<div class="main">
+		<div class="postbox radius">
+            <h2 class="first_title">Leetcode----Search Insert Position</h2>
+            <p class="posted_info">
+                posted by 董三 on 2013-11-07 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
+            </p>
+            <div class="postcontent">
+			<p>
+    <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+    Search Insert Position
+</h2>
+<pre class="prettyprint">
+Given a sorted array and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+
+You may assume no duplicates in the array.
+
+Here are few examples.
+[1,3,5,6], 5 → 2
+[1,3,5,6], 2 → 1
+[1,3,5,6], 7 → 4
+[1,3,5,6], 0 → 0 
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题目的意思是，给定一个排序的整形数组和一个数值，如果这个数值能在数组中找到，就返回这个数值在数组的下标；如果找不到，那么就返回应该按序插入的位置下标。</p>
+<pre class="prettyprint">
+     * 既然题目说了是排序的数组，很显然要用二分查找
+     * 二分查找有两点需要注意：死循环和漏元素
+     * 还要注意当所有数组元素都小于@target的特殊情况
+</pre>
+<h2 class="content_h2">Code</h2>
+<div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="cm">/* </span>
+<span class="cm">     * 既然题目说了是排序的数组，很显然要用二分查找</span>
+<span class="cm">     * 二分查找有两点需要注意：死循环和漏元素</span>
+<span class="cm">     * 还要注意当所有数组元素都小于@target的特殊情况</span>
+<span class="cm">     * */</span>
+    <span class="kt">int</span> <span class="n">searchInsert</span><span class="p">(</span><span class="kt">int</span> <span class="n">A</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
+        <span class="c1">// the same Solution instance will be reused for each test case.</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">middle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">A</span> <span class="o">||</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span> <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">middle</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="p">((</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">middle</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">middle</span><span class="p">;</span>
+            <span class="k">else</span> <span class="nf">if</span><span class="p">(</span> <span class="n">A</span><span class="p">[</span><span class="n">middle</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span> <span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="c1">//这里不能用right = middle+1</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">middle</span><span class="p">;</span> 
+        <span class="p">}</span>
+        <span class="c1">// 当@target大于所有数组元素</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">right</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="c1">// 当插入位置是第一个大于@target的位置</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">left</span> <span class="o">==</span> <span class="n">right</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">left</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="http://www.ifdong.com/images/download.jpg" alt="pic" />
+    </a>
+</p>
+
+            </div>
+            
+    		<div class="likepost">
+    			<h2>相关日志</h2>
+    			<ul>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/07/leetcode-Two-Sum.html">Leetcode----Two Sum</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/07/leetcode-Search-Insert-Position.html">Leetcode----Search Insert Position</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/07/leetcode-Remove-Duplicates-from-Sorted-List.html">Leetcode----Remove Duplicates from Sorted List</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/07/leetcode-Merge-Two-Sorted-Lists.html">Leetcode----Merge Two Sorted Lists</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/06/leetcode-Longest-Substring-Without-Repeating-Characters.html">Leetcode----Longest Substring Without Repeating Characters</a></li>
+    				
+    			</ul>
+    		</div>
+        <!-- UY BEGIN -->
+        <div id="uyan_frame"></div>
+        <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1850163"></script>
+        <!-- UY END -->
+	</div>
+		<div class="blank20"></div>
+                <div class="footer radius">
+                        &copy; 董三(dariusdong) 2013 Powered by GitHub <a href="https://github.com/mojombo/jekyll" target="_blank">jekyll</a>
+                </div>
+		<div style="display:none;">
+		<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F751292173225837a2688c4185dd750d6' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		</div>
+        </div>
+</body>
+</html>
+
+
