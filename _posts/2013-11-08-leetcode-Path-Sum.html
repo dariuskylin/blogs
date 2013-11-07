@@ -1,0 +1,72 @@
+---
+layout: post
+title: Leetcode----Path Sum
+category: leetcode
+description: leetcode oj题目:Add Two Numbers; Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that adding up all the values along the path equals the given sum. 
+img: 201311/20131101.jpg
+keywords: leetcode, Path Sum
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Path Sum
+</h2>
+<pre class="prettyprint">
+Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that adding up all the values along the path equals the given sum. 
+For example:
+Given the below binary tree and sum = 22, 
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \      \
+        7    2      1
+return true, as there exist a root-to-leaf path 5->4->11->2 which sum is 22.
+
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题意是给定一颗二叉树和一个和sum，判断这颗二叉树是否有一条root-to-leaf的路径，使经过的节点的val和等于sum.</p>、
+<pre class="prettyprint">
+     * 树的很多问题都可以用递归来解决，这道题目找的是root-to-leaf的和，那么root是肯定经过的
+     * 所以我们可以分解出树的子树来解决:
+     * 1、如果当前节点是叶子节点，而且当前节点的val等于sum，那么返回true
+     * 2、对于其他情况，递归调用自身的左子树和右子树来解决；
+</pre>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    /* 
+     * 树的很多问题都可以用递归来解决，这道题目找的是root-to-leaf的和，那么root是肯定经过的
+     * 所以我们可以分解出树的子树来解决:
+     * 1、如果当前节点是叶子节点，而且当前节点的val等于sum，那么返回true
+     * 2、对于其他情况，递归调用自身的左子树和右子树来解决；
+     * */
+    bool hasPathSum(TreeNode *root, int sum) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        if( !root )     return false;
+        if(root->val == sum && root->left == NULL && root->right == NULL)
+            return true;
+        return hasPathSum(root->left, sum - root->val) || hasPathSum(root->right, sum - root->right);
+    }
+};
+{% endhighlight %}
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>
