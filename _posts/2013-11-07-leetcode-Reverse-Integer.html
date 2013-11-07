@@ -1,0 +1,84 @@
+---
+layout: post
+title: Leetcode----Reverse Integer
+category: leetcode
+description: leetcode oj题目:Reverse Integer; Reverse digits of an integer. Example1: x = 123, return 321; Example2: x = -123, return -321 
+img: 201311/20131101.jpg
+keywords: leetcode, Reverse Integer
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Reverse Integer
+</h2>
+<pre class="prettyprint">
+Reverse digits of an integer.
+
+Example1: x = 123, return 321
+Example2: x = -123, return -321 
+
+click to show spoilers.
+
+Have you thought about this? 
+Here are some good questions to ask before coding. Bonus points for you if you have already thought through this!
+
+If the integer's last digit is 0, what should the output be? ie, cases such as 10, 100.
+
+Did you notice that the reversed integer might overflow? Assume the input is a 32-bit integer, then the reverse of 1000000003 overflows. How should you handle such cases?
+
+Throw an exception? Good, but what if throwing an exception is not an option? You would then have to re-design the function (ie, add an extra parameter).
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题目要求将一个int逆序，如123逆序为321，-123逆序为-321.</p>、
+<p>1、如果输入的是负数，那么逆序的int也是负的</p>
+<p>2、逆序的数字首位有0，需要忽略。如009是应该写作9的。</p>
+
+<pre class="prettyprint">
+     * 虽然题目note里面说了要注意整形溢出，但是给出的函数类型返回值是int，code就不用考虑溢出了~
+     * 输入整形的正负号，我们用一个变量@neg来标记。
+     * 在字符串和整形之间的转化中，我们统一都将输入整数当作正数来看待（负的取绝对值）
+     * 借助于stringstream，我们将int转为string，再把string逆序，最后再借助于stringstream，
+     * 将string转为int（不必自己去手动忽略string的低位0）。
+</pre>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+class Solution {
+public:
+    /* 
+     * 虽然题目note里面说了要注意整形溢出，但是给出的函数类型返回值是int，code就不用考虑溢出了~
+     * 输入整形的正负号，我们用一个变量@neg来标记。
+     * 在字符串和整形之间的转化中，我们统一都将输入整数当作正数来看待（负的取绝对值）
+     * 借助于stringstream，我们将int转为string，再把string逆序，最后再借助于stringstream，
+     * 将string转为int（不必自己去手动忽略string的低位0）。
+     * */
+    int reverse(int x) {
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        int neg = 1;
+        if(x < 0)
+            neg = -1, x = -x;
+        stringstream ss;
+        string s;
+        char temp;
+        int integer;
+        ss<<x;
+        ss>>s;
+        for(int pos = 0; pos < s.size()/2; pos++)
+        {
+            temp = s[pos];
+            s[pos] = s[s.size() - 1 -pos];
+            s[s.size() - 1 -pos] = temp;
+        }
+        // 再次使用stringstream，要先clear
+        ss.clear();
+        ss<<s;
+        ss>>integer;
+        return neg*integer;
+    }
+};
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>
