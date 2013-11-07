@@ -1,0 +1,82 @@
+---
+layout: post
+title: Leetcode----Add Two Numbers
+category: leetcode
+description: leetcode oj题目:Add Two Numbers; You are given two linked lists representing two non-negative numbers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+img: 201311/20131101.jpg
+keywords: leetcode, Add Two Numbers
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Add Two Numbers
+</h2>
+<pre class="prettyprint">
+You are given two linked lists representing two non-negative numbers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+
+Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+Output: 7 -> 0 -> 8
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题意是两个链表相加.</p>、
+<pre class="prettyprint">
+     * 这是一个简单的链表操作问题，两个链表节点顺序相加即可，唯一要注意的是进位问题，
+     * 进位包括中间节点的进位，和最后只有一个节点相加后的遗留进位1需要一个新节点。
+</pre>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    /* 
+     * 链表操作问题，简单的两个链表节点相加即可，唯一要注意的是进位问题，
+     * 进位包括中间节点的进位，和最后只有一个节点相加后的遗留进位1需要一个新节点。
+     * */
+    ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        if( !l1 )   return l2;
+        if( !l2 )   return l1;
+        int carry = 0;
+        int lhs, rhs, tempSum;
+        ListNode *head = NULL, *ptr;
+        while( l1 || l2)
+        {
+            if(l1)  lhs = l1->val;  else lhs = 0;
+            if(l2)  rhs = l2->val;  else rhs = 0;
+            tempSum = lhs + rhs + carry;
+            if(tempSum >= 10)   
+                carry = 1, tempSum -= 10;
+            else
+                carry = 0;
+            if( !head )
+                head = new ListNode(tempSum), ptr = head;
+            else
+                ptr->next = new ListNode(tempSum), ptr = ptr->next;
+            if(l1)
+                l1 = l1->next;
+            if(l2) 
+                l2 = l2->next;
+        }
+        // 如果最后遗留一个进位1
+        if( carry )
+            ptr->next = new ListNode(carry);
+        return head;
+    }
+};
+{% endhighlight %}
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>
