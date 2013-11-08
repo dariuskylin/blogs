@@ -1,0 +1,90 @@
+---
+layout: post
+title: Leetcode----Valid Parentheses
+category: leetcode
+description: leetcode oj题目:Valid Parentheses; Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+img: 201311/20131101.jpg
+keywords: leetcode, Valid Parentheses
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Valid Parentheses
+</h2>
+<pre class="prettyprint">
+Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题目的意思是，给定一个只包含括号字符的字符串，判断左右括号是否匹配。</p>
+
+<pre class="prettyprint">
+     * 借助于栈来解决：
+     * 1、遍历字符串所有元素
+     * 2、遇到左括号就压栈
+     * 3、遇到右括号，则判断栈顶左括号是否与右括号匹配（栈为空要考虑）
+     * 4、如果不匹配，则直接return不匹配；反之，出栈左括号
+     * 5、直到字符串所有元素处理完
+     * 6、查看栈是否为空，如果为空，说明没有剩余左括号，那么return匹配；反之不匹配
+</pre>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+class Solution {
+public:
+    /* 
+     * 借助于栈来解决：
+     * 1、遍历字符串所有元素
+     * 2、遇到左括号就压栈
+     * 3、遇到右括号，则判断栈顶左括号是否与右括号匹配（栈为空要考虑）
+     * 4、如果不匹配，则直接return不匹配；反之，出栈左括号
+     * 5、直到字符串所有元素处理完
+     * 6、查看栈是否为空，如果为空，说明没有剩余左括号，那么return匹配；反之不匹配
+     * */
+    bool isValid(string s) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        if(s.size() == 0)       return true;
+        if(s.size() == 1)       return false;
+        stack<char> cstack;
+        map<char, char> ctable;
+        ctable['['] = ']';
+        ctable['('] = ')';
+        ctable['{'] = '}';
+        for(int pos = 0; pos < s.length(); pos++)
+        {
+            // 如果遇到左括号，直接压栈
+            if(isLeftHalf(s[pos]))
+                cstack.push(s[pos]);
+            // 遇到右括号，则看下栈是否为空、和栈顶括号是否配对
+            else
+            {
+                // 注意判断栈是否为空应该在前面，因为如果栈空，就没有栈顶元素
+                if(cstack.empty())
+                    return false;
+                if(ctable[cstack.top()] == s[pos])
+                    cstack.pop();
+            }
+        }
+        // 栈内是否还有左括号
+        if(cstack.empty())
+            return true;
+        return false;
+    }
+private:
+    bool isLeftHalf(char c)
+    {
+        if(c == '{' || c == '(' || c == '[')
+            return true;
+        return false;
+    }
+};
+{% endhighlight %}
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>
