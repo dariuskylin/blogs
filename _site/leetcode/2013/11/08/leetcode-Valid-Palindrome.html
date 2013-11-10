@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Leetcode----Valid Palindrome dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Valid Palindromedariusdong,dongyuchi,blog,logs,博客"/>
+        <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
+		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
+        <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
+        <link href="http://www.ifdong.com/css/pygments.css" rel="stylesheet" type="text/css" />
+        <link href="/prettify/prettify.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/favicon.ico"/>
+		<link rel="bookmark" href="/favicon.ico"/>
+		<script type="text/javascript" src="/jquery.js"></script>
+		<script type="text/javascript" src="/prettify/prettify.js"></script>
+</head>
+<body>
+        <div class="wrap">
+		<div class="header radius black">
+			<h2><a href="http://www.ifdong.com">dariusdong's BLOG</a></h2>
+            <span class="right">
+                以俺多年种田的经验来看，神马都略懂一点，生活才多彩一点……猪葛亮说的……
+            </span>
+		</div>
+
+	<div class="main">
+		<div class="postbox radius">
+            <h2 class="first_title">Leetcode----Valid Palindrome</h2>
+            <p class="posted_info">
+                posted by 董三 on 2013-11-08 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
+            </p>
+            <div class="postcontent">
+			<p>
+    <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Valid Palindrome
+</h2>
+<pre class="prettyprint">
+Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+ 
+For example,
+ "A man, a plan, a canal: Panama" is a palindrome.
+ "race a car" is not a palindrome. 
+
+Note:
+ Have you consider that the string might be empty? This is a good question to ask during an interview.
+For the purpose of this problem, we define empty string as valid palindrome. 
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题目的意思是，给定一个字符串，忽略非数字非字母字符，忽略大小写，判断其是否是个回文串。</p>
+
+<pre class="prettyprint">
+     * 这道题判断是否是回文串，有两个步骤：
+     * 1、对字符串的预处理，题目要求只考虑字符串中的数字和字母，而且字母忽略大小写。
+     *    为了方便，我们可以新建一个临时vector将非数字和字母的字符过滤掉，同时将
+     *    大写转换成小写，统一处理字符。
+     * 2、从字符串起始位置到中间位置，逐次判断它的对称位置的字符是否一致，否那么
+     *    不是回文；反之如果都一致，那么就是回文。
+</pre>
+<h2 class="content_h2">Code</h2>
+<div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="cm">/* </span>
+<span class="cm">     * 这道题判断是否是回文串，有两个步骤：</span>
+<span class="cm">     * 1、对字符串的预处理，题目要求只考虑字符串中的数字和字母，而且字母忽略大小写。</span>
+<span class="cm">     *    为了方便，我们可以新建一个临时vector将非数字和字母的字符过滤掉，同时将</span>
+<span class="cm">     *    大写转换成小写，统一处理字符。</span>
+<span class="cm">     * 2、从字符串起始位置到中间位置，逐次判断它的对称位置的字符是否一致，否那么</span>
+<span class="cm">     *    不是回文；反之如果都一致，那么就是回文。</span>
+<span class="cm">     *</span>
+<span class="cm">     * */</span>
+    <span class="kt">bool</span> <span class="n">isPalindrome</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
+        <span class="c1">// the same Solution instance will be reused for each test case.</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">middlestring</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">pos</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="sc">&#39;0&#39;</span><span class="o">&amp;&amp;</span><span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="sc">&#39;9&#39;</span><span class="p">)</span><span class="o">||</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="sc">&#39;a&#39;</span><span class="o">&amp;&amp;</span><span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="sc">&#39;z&#39;</span><span class="p">))</span>
+                <span class="n">middlestring</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">]);</span>
+            <span class="c1">// 将大写转换为小写</span>
+            <span class="k">else</span> <span class="nf">if</span><span class="p">((</span><span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="sc">&#39;A&#39;</span><span class="o">&amp;&amp;</span><span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="sc">&#39;Z&#39;</span><span class="p">)</span> <span class="p">)</span>
+                <span class="n">middlestring</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">+</span> <span class="sc">&#39;a&#39;</span> <span class="o">-</span> <span class="sc">&#39;A&#39;</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="kt">bool</span> <span class="n">ok</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="n">middlestring</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="n">pos</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// 判断对称位置的字符是否相等</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">middlestring</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">!=</span> <span class="n">middlestring</span><span class="p">[</span><span class="n">middlestring</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">pos</span><span class="p">])</span>
+            <span class="p">{</span>
+                <span class="n">ok</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ok</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="http://www.ifdong.com/images/download.jpg" alt="pic" />
+    </a>
+</p>
+
+            </div>
+            
+    		<div class="likepost">
+    			<h2>相关日志</h2>
+    			<ul>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/10/leetcode-Edit-Distance.html">Leetcode----Edit Distance</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Valid-Parentheses.html">Leetcode----Valid Parentheses</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Valid-Palindrome.html">Leetcode----Valid Palindrome</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Path-Sum.html">Leetcode----Path Sum</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Add-Two-Numbers.html">Leetcode----Add Two Numbers</a></li>
+    				
+    			</ul>
+    		</div>
+        <!-- UY BEGIN -->
+        <div id="uyan_frame"></div>
+        <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1850163"></script>
+        <!-- UY END -->
+	</div>
+		<div class="blank20"></div>
+                <div class="footer radius">
+                        &copy; 董三(dariusdong) 2013 Powered by GitHub <a href="https://github.com/mojombo/jekyll" target="_blank">jekyll</a>
+                </div>
+		<div style="display:none;">
+		<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F751292173225837a2688c4185dd750d6' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		</div>
+        </div>
+</body>
+</html>
+
+

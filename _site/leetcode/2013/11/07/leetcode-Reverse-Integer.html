@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Leetcode----Reverse Integer dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Reverse Integerdariusdong,dongyuchi,blog,logs,博客"/>
+        <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
+		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
+        <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
+        <link href="http://www.ifdong.com/css/pygments.css" rel="stylesheet" type="text/css" />
+        <link href="/prettify/prettify.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/favicon.ico"/>
+		<link rel="bookmark" href="/favicon.ico"/>
+		<script type="text/javascript" src="/jquery.js"></script>
+		<script type="text/javascript" src="/prettify/prettify.js"></script>
+</head>
+<body>
+        <div class="wrap">
+		<div class="header radius black">
+			<h2><a href="http://www.ifdong.com">dariusdong's BLOG</a></h2>
+            <span class="right">
+                以俺多年种田的经验来看，神马都略懂一点，生活才多彩一点……猪葛亮说的……
+            </span>
+		</div>
+
+	<div class="main">
+		<div class="postbox radius">
+            <h2 class="first_title">Leetcode----Reverse Integer</h2>
+            <p class="posted_info">
+                posted by 董三 on 2013-11-07 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
+            </p>
+            <div class="postcontent">
+			<p>
+    <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Reverse Integer
+</h2>
+<pre class="prettyprint">
+Reverse digits of an integer.
+
+Example1: x = 123, return 321
+Example2: x = -123, return -321 
+
+click to show spoilers.
+
+Have you thought about this? 
+Here are some good questions to ask before coding. Bonus points for you if you have already thought through this!
+
+If the integer's last digit is 0, what should the output be? ie, cases such as 10, 100.
+
+Did you notice that the reversed integer might overflow? Assume the input is a 32-bit integer, then the reverse of 1000000003 overflows. How should you handle such cases?
+
+Throw an exception? Good, but what if throwing an exception is not an option? You would then have to re-design the function (ie, add an extra parameter).
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题目要求将一个int逆序，如123逆序为321，-123逆序为-321.</p>、
+<p>1、如果输入的是负数，那么逆序的int也是负的</p>
+<p>2、逆序的数字首位有0，需要忽略。如009是应该写作9的。</p>
+
+<pre class="prettyprint">
+     * 虽然题目note里面说了要注意整形溢出，但是给出的函数类型返回值是int，code就不用考虑溢出了~
+     * 输入整形的正负号，我们用一个变量@neg来标记。
+     * 在字符串和整形之间的转化中，我们统一都将输入整数当作正数来看待（负的取绝对值）
+     * 借助于stringstream，我们将int转为string，再把string逆序，最后再借助于stringstream，
+     * 将string转为int（不必自己去手动忽略string的低位0）。
+</pre>
+<h2 class="content_h2">Code</h2>
+<div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="cm">/* </span>
+<span class="cm">     * 虽然题目note里面说了要注意整形溢出，但是给出的函数类型返回值是int，code就不用考虑溢出了~</span>
+<span class="cm">     * 输入整形的正负号，我们用一个变量@neg来标记。</span>
+<span class="cm">     * 在字符串和整形之间的转化中，我们统一都将输入整数当作正数来看待（负的取绝对值）</span>
+<span class="cm">     * 借助于stringstream，我们将int转为string，再把string逆序，最后再借助于stringstream，</span>
+<span class="cm">     * 将string转为int（不必自己去手动忽略string的低位0）。</span>
+<span class="cm">     * */</span>
+    <span class="kt">int</span> <span class="n">reverse</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Note: The Solution object is instantiated only once and is reused by each test case.</span>
+        <span class="kt">int</span> <span class="n">neg</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">neg</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">stringstream</span> <span class="n">ss</span><span class="p">;</span>
+        <span class="n">string</span> <span class="n">s</span><span class="p">;</span>
+        <span class="kt">char</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">integer</span><span class="p">;</span>
+        <span class="n">ss</span><span class="o">&lt;&lt;</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">ss</span><span class="o">&gt;&gt;</span><span class="n">s</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="n">pos</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">];</span>
+            <span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span><span class="n">pos</span><span class="p">];</span>
+            <span class="n">s</span><span class="p">[</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// 再次使用stringstream，要先clear</span>
+        <span class="n">ss</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">ss</span><span class="o">&lt;&lt;</span><span class="n">s</span><span class="p">;</span>
+        <span class="n">ss</span><span class="o">&gt;&gt;</span><span class="n">integer</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">neg</span><span class="o">*</span><span class="n">integer</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="http://www.ifdong.com/images/download.jpg" alt="pic" />
+    </a>
+</p>
+
+            </div>
+            
+    		<div class="likepost">
+    			<h2>相关日志</h2>
+    			<ul>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/10/leetcode-Edit-Distance.html">Leetcode----Edit Distance</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Valid-Parentheses.html">Leetcode----Valid Parentheses</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Valid-Palindrome.html">Leetcode----Valid Palindrome</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Path-Sum.html">Leetcode----Path Sum</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Add-Two-Numbers.html">Leetcode----Add Two Numbers</a></li>
+    				
+    			</ul>
+    		</div>
+        <!-- UY BEGIN -->
+        <div id="uyan_frame"></div>
+        <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1850163"></script>
+        <!-- UY END -->
+	</div>
+		<div class="blank20"></div>
+                <div class="footer radius">
+                        &copy; 董三(dariusdong) 2013 Powered by GitHub <a href="https://github.com/mojombo/jekyll" target="_blank">jekyll</a>
+                </div>
+		<div style="display:none;">
+		<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F751292173225837a2688c4185dd750d6' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		</div>
+        </div>
+</body>
+</html>
+
+

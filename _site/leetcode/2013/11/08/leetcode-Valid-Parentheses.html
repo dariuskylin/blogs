@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Leetcode----Valid Parentheses dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Valid Parenthesesdariusdong,dongyuchi,blog,logs,博客"/>
+        <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
+		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
+        <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
+        <link href="http://www.ifdong.com/css/pygments.css" rel="stylesheet" type="text/css" />
+        <link href="/prettify/prettify.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/favicon.ico"/>
+		<link rel="bookmark" href="/favicon.ico"/>
+		<script type="text/javascript" src="/jquery.js"></script>
+		<script type="text/javascript" src="/prettify/prettify.js"></script>
+</head>
+<body>
+        <div class="wrap">
+		<div class="header radius black">
+			<h2><a href="http://www.ifdong.com">dariusdong's BLOG</a></h2>
+            <span class="right">
+                以俺多年种田的经验来看，神马都略懂一点，生活才多彩一点……猪葛亮说的……
+            </span>
+		</div>
+
+	<div class="main">
+		<div class="postbox radius">
+            <h2 class="first_title">Leetcode----Valid Parentheses</h2>
+            <p class="posted_info">
+                posted by 董三 on 2013-11-08 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
+            </p>
+            <div class="postcontent">
+			<p>
+    <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Valid Parentheses
+</h2>
+<pre class="prettyprint">
+Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题目的意思是，给定一个只包含括号字符的字符串，判断左右括号是否匹配。</p>
+
+<pre class="prettyprint">
+     * 借助于栈来解决：
+     * 1、遍历字符串所有元素
+     * 2、遇到左括号就压栈
+     * 3、遇到右括号，则判断栈顶左括号是否与右括号匹配（栈为空要考虑）
+     * 4、如果不匹配，则直接return不匹配；反之，出栈左括号
+     * 5、直到字符串所有元素处理完
+     * 6、查看栈是否为空，如果为空，说明没有剩余左括号，那么return匹配；反之不匹配
+</pre>
+<h2 class="content_h2">Code</h2>
+<div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="cm">/* </span>
+<span class="cm">     * 借助于栈来解决：</span>
+<span class="cm">     * 1、遍历字符串所有元素</span>
+<span class="cm">     * 2、遇到左括号就压栈</span>
+<span class="cm">     * 3、遇到右括号，则判断栈顶左括号是否与右括号匹配（栈为空要考虑）</span>
+<span class="cm">     * 4、如果不匹配，则直接return不匹配；反之，出栈左括号</span>
+<span class="cm">     * 5、直到字符串所有元素处理完</span>
+<span class="cm">     * 6、查看栈是否为空，如果为空，说明没有剩余左括号，那么return匹配；反之不匹配</span>
+<span class="cm">     * */</span>
+    <span class="kt">bool</span> <span class="n">isValid</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
+        <span class="c1">// the same Solution instance will be reused for each test case.</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>       <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>       <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">stack</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">cstack</span><span class="p">;</span>
+        <span class="n">map</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="kt">char</span><span class="o">&gt;</span> <span class="n">ctable</span><span class="p">;</span>
+        <span class="n">ctable</span><span class="p">[</span><span class="sc">&#39;[&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;]&#39;</span><span class="p">;</span>
+        <span class="n">ctable</span><span class="p">[</span><span class="sc">&#39;(&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;)&#39;</span><span class="p">;</span>
+        <span class="n">ctable</span><span class="p">[</span><span class="sc">&#39;{&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;}&#39;</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="n">pos</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// 如果遇到左括号，直接压栈</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">isLeftHalf</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">]))</span>
+                <span class="n">cstack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">]);</span>
+            <span class="c1">// 遇到右括号，则看下栈是否为空、和栈顶括号是否配对</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="c1">// 注意判断栈是否为空应该在前面，因为如果栈空，就没有栈顶元素</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">cstack</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+                    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">ctable</span><span class="p">[</span><span class="n">cstack</span><span class="p">.</span><span class="n">top</span><span class="p">()]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">pos</span><span class="p">])</span>
+                    <span class="n">cstack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="c1">// 栈内是否还有左括号</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">cstack</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="nl">private:</span>
+    <span class="kt">bool</span> <span class="n">isLeftHalf</span><span class="p">(</span><span class="kt">char</span> <span class="n">c</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">&#39;{&#39;</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">&#39;(&#39;</span> <span class="o">||</span> <span class="n">c</span> <span class="o">==</span> <span class="sc">&#39;[&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="http://www.ifdong.com/images/download.jpg" alt="pic" />
+    </a>
+</p>
+
+            </div>
+            
+    		<div class="likepost">
+    			<h2>相关日志</h2>
+    			<ul>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/10/leetcode-Edit-Distance.html">Leetcode----Edit Distance</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Valid-Parentheses.html">Leetcode----Valid Parentheses</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Valid-Palindrome.html">Leetcode----Valid Palindrome</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Path-Sum.html">Leetcode----Path Sum</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Add-Two-Numbers.html">Leetcode----Add Two Numbers</a></li>
+    				
+    			</ul>
+    		</div>
+        <!-- UY BEGIN -->
+        <div id="uyan_frame"></div>
+        <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1850163"></script>
+        <!-- UY END -->
+	</div>
+		<div class="blank20"></div>
+                <div class="footer radius">
+                        &copy; 董三(dariusdong) 2013 Powered by GitHub <a href="https://github.com/mojombo/jekyll" target="_blank">jekyll</a>
+                </div>
+		<div style="display:none;">
+		<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F751292173225837a2688c4185dd750d6' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		</div>
+        </div>
+</body>
+</html>
+
+

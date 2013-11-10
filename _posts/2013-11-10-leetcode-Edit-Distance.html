@@ -1,0 +1,144 @@
+---
+layout: post
+title: Leetcode----Edit Distance
+category: leetcode
+description: leetcode oj题目:Edit Distance; Given two words word1 and word2, find the minimum number of steps required to convert word1 to word2. (each operation is counted as 1 step.) 
+keywords: leetcode, Edit Distance
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Edit Distance
+</h2>
+<pre class="prettyprint">
+Given two words word1 and word2, find the minimum number of steps required to convert word1 to word2. (each operation is counted as 1 step.) 
+
+You have the following 3 operations permitted on a word: 
+
+ a) Insert a character
+ b) Delete a character
+ c) Replace a character
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题意是寻找两个字符串的最小编辑距离，可以字符可以通过insert、delete、replace三种编辑方法使之相等.</p>、
+<pre class="prettyprint">
+     * 这是典型的DP问题
+     * 对字符串A[1,2,...,m]和字符串B[1,2,...,n]，长度分别为m，n
+     * 1、若A[m]=B[n]，那么A[1,...,m]和B[1,...,n]的编辑距离应该等于A[1,...,m-1]和B[1,...,n-1]
+     * 2、若A[m]!=B[n]，情况就比较复杂：编辑方法分为insert、delete、replace三种。我们需要分别
+     *    求出这三种方法的最小值，然后从这三个值中再取最小值。
+     *    insert分为对A操作或B操作，所以有两个值，minDistance(A[1,...,m], B[1,...,n-1])和minDistance(A[1,...,m-1], B[1,...,n]) 
+     *    delete同样分为对A和B操作，两个值，minDistance(A[1,...,m], B[1,...,n-1])和minDistance(A[1,...,m-1], B[1,...,n])，可以发现与insert具有一样的值 
+     *    replace仅有一个值minDistance(A[1,...,m-1], B[1,...,n-1])
+     * 3、子问题的求解可以使用自底向上或者自顶向下两种方法，自顶向下递归嵌套出现了超时错误，因此需要使用自底向上求解子问题
+</pre>
+<h2 class="content_h2">Code</h2>
+<h3>Code 1:自顶向下的递归式的解法(Limit Exceeded)</h3>
+{% highlight c++ %}
+class Solution {
+public:
+    /*
+     * 这是典型的DP问题
+     * 对字符串A[1,2,...,m]和字符串B[1,2,...,n]，长度分别为m，n
+     * 1、若A[m]=B[n]，那么A[1,...,m]和B[1,...,n]的编辑距离应该等于A[1,...,m-1]和B[1,...,n-1]
+     * 2、若A[m]!=B[n]，情况就比较复杂：编辑方法分为insert、delete、replace三种。我们需要分别
+     *    求出这三种方法的最小值，然后从这三个值中再取最小值。
+     *    insert分为对A操作或B操作，所以有两个值，minDistance(A[1,...,m], B[1,...,n-1])和minDistance(A[1,...,m-1], B[1,...,n]) 
+     *    delete同样分为对A和B操作，两个值，minDistance(A[1,...,m], B[1,...,n-1])和minDistance(A[1,...,m-1], B[1,...,n])，可以发现与insert具有一样的值 
+     *    replace仅有一个值minDistance(A[1,...,m-1], B[1,...,n-1])
+     * 3、下面的解法使用的是自顶向下的递归式解法，多层嵌套，导致了最后的Time Limit Exceeded错误，超时
+     */
+    int minDistance(string word1, string word2) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        if(word1.size() == 0)   return word2.size();
+        if(word2.size() == 0)   return word1.size();
+        int minInsert = 0, minDelete = 0, minReplace = 0;
+        if(word1[word1.length() - 1] == word2[word2.length() - 1])
+            return minDistance(word1.substr(0, word1.length()-1), 
+                word2.substr(0, word2.length() -1));
+        else
+        {
+            //通过insert操作的min距离
+            minInsert = 1 + std::min(minDistance(word1, word2.substr(0, word2.length() - 1)), 
+                minDistance(word1.substr(0, word1.length()-1), word2));
+            /*
+            //通过delete操作的min距离
+            minDelete = 1 + std::min(minDistance(word1.substr(0, word1.length() -1), word2), 
+            minDistance(word1, word2.substr(0, word2.length() - 1)) );
+            */
+            //通过replace操作的min距离
+            minReplace = 1 + minDistance(word1.substr(0, word1.length() - 1), word2.substr(0, word2.length() - 1));
+            /*
+             *返回值，应该是minInsert、minDelete、minReplace三个的最小值
+             *通过观察，minInsert=minDelete，所以我们可以省事，最小值可以只比较两个
+             */
+            return std::min(minInsert, minReplace);
+        }
+    }
+};
+{% endhighlight %}
+<h3>Code 2:自底向上的非递归式的解法(Accepted)</h3>
+{% highlight c++ %}
+class Solution {
+public:
+    /* 这是典型的DP问题
+     * 对字符串A[1,2,...,m]和字符串B[1,2,...,n]，长度分别为m，n
+     * 1、若A[m]=B[n]，那么A[1,...,m]和B[1,...,n]的编辑距离应该等于A[1,...,m-1]和B[1,...,n-1]
+     * 2、若A[m]!=B[n]，情况就比较复杂：编辑方法分为insert、delete、replace三种。我们需要分别
+     *    求出这三种方法的最小值，然后从这三个值中再取最小值。
+     *    insert分为对A操作或B操作，所以有两个值，minDistance(A[1,...,m], B[1,...,n-1])和minDistance(A[1,...,m-1], B[1,...,n]) 
+     *    delete同样分为对A和B操作，两个值，minDistance(A[1,...,m], B[1,...,n-1])和minDistance(A[1,...,m-1], B[1,...,n])，可以发现与insert具有一样的值 
+     *    replace仅有一个值minDistance(A[1,...,m-1], B[1,...,n-1])
+     * 3、之前使用自顶向下的递归式方法超时了，下面代码使用了自底向上的方法，避免了递归嵌套，AC
+     */
+    int minDistance(string word1, string word2) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        int row = word1.size();
+        int col = word2.size();
+        int minInsert, minDelete, minReplace;
+        if(row == 0)       return col;
+        if(col == 0)       return row;
+        vector< vector<int> > tables(row + 1, vector<int>(col + 1, 0));
+        //设置边界值。即A[j]和B[0]之间的距离应该是j
+        for(int rowidx = 0; rowidx < row + 1; rowidx++)
+            tables[rowidx][0] = rowidx;
+        //设置边界值
+        for(int colidx = 0; colidx < col + 1; colidx++)
+            tables[0][colidx] = colidx;
+        for(int rowidx = 1; rowidx < row + 1; rowidx++)
+            for(int colidx = 1; colidx < col + 1; colidx++)
+            {
+                if(word1[rowidx - 1] == word2[colidx - 1])
+                {
+                    tables[rowidx][colidx] = tables[rowidx-1][colidx-1];
+                }
+                else
+                {
+                    //通过insert操作的min距离
+                    minInsert = 1 + std::min(tables[rowidx-1][colidx], tables[rowidx][colidx-1]);
+                    //通过delete操作的min距离（和minInsert相等，所以可以不计算）
+                    /*
+                    minDelete = 1 + std::min(tables[rowidx-1][colidx], tables[tables[rowidx][colidx-1]]);
+                    */
+                    //通过replace操作的min距离
+                    minReplace = 1 + tables[rowidx-1][colidx-1];
+                    /*
+                     * tables[rowidx][colidx]应该是minInsert、minDelete、minReplace三个值的最小值
+                     * 而通过观察可以看到minInsert和minDelete是相等的，所以可以省一次比较
+                     */
+                     tables[rowidx][colidx] = std::min(minInsert, minReplace);
+                }
+            }
+        return tables[row][col];
+    }
+};
+{% endhighlight %}
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>
