@@ -1,0 +1,114 @@
+---
+layout: post
+title: Leetcode----Unique-Paths
+category: leetcode
+description: leetcode oj题目:Unique-Paths; A robot is located at the top-left corner of a m x n grid (marked 'Start' in the diagram below).How many possible unique paths are there?
+img: 201311/20131101.jpg
+keywords: leetcode, Unique-Paths
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Unique-Paths
+</h2>
+<pre class="prettyprint">
+A robot is located at the top-left corner of a m x n grid (marked 'Start' in the diagram below).
+
+The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked 'Finish' in the diagram below).
+
+How many possible unique paths are there?
+Above is a 3 x 7 grid. How many possible unique paths are there? 
+
+<font color="red">Note: m and n will be at most 100.</font>
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题目的意思是，有一个m*n的各自，机器人从左上方的(1,1)为起点，每一步只能往下走或者往右走，走到右下角一共有多少条路？</p>
+<font color="red">这道题目既可以用DP解答，也可以用排列解.</font>
+
+<h2 class="content_h2">Code</h2>
+<h3>使用排列来解答(ACCEPT)</h3>
+<pre class="prettyprint">
+      * 下面的代码使用了排列的方法来解答：
+      * 由排列的知识，显然可知，从起点map[1][1]到终点map[m][n]一共需向下走m-1次，向右走n-1次
+      * 只需要计算出这m-1+n-1次的全排列次数即可。
+      * 由于m-1次下有重复，n-1次右也有重复，因此全排列次数为：P(m-1+n-1)/(P(m-1)*P(n-1))
+</pre>
+{% highlight c++ %}
+class Solution {
+ public:
+     /* 
+      * 这道题目既可以用DP解答，也可以用排列解
+      * 下面的代码使用了排列的方法来解答：
+      * 由排列的知识，显然可知，从起点map[1][1]到终点map[m][n]一共需向下走m-1次，向右走n-1次
+      * 只需要计算出这m-1+n-1次的全排列次数即可。
+      * 由于m-1次下有重复，n-1次右也有重复，因此全排列次数为：P(m-1+n-1)/(P(m-1)*P(n-1))
+      * */
+     int uniquePaths(int m, int n) {
+         // IMPORTANT: Please reset any member data you declared, as
+         // the same Solution instance will be reused for each test case.
+         if(!m || !n) return 0;
+         if(m == 1 || n==1)     return 1;
+         long long ret = 1;
+         int alignSteps = m -1;
+         int verticalSteps = n -1;
+         if(alignSteps < verticalSteps)
+         {
+             int temp = alignSteps;
+             alignSteps = verticalSteps;
+             verticalSteps = temp;
+         }
+        for(int i = alignSteps+1; i <=verticalSteps+alignSteps; i++)
+            ret *= i;
+        for(int i = 1; i <= verticalSteps; i++)
+            ret /= i;
+        return ret;
+     }
+};
+{% endhighlight %}
+<h3>使用DP来解答(ACCEPT)</h3>
+<pre class="prettyprint">
+         * 下面的代码使用DP的方法来解答：
+         * 由题意值，走的方向只有两个，右和下。所以，任意位置map[i][j]的上一步可能是两个位置：
+         * map[i-1][j]或者map[i][j-1]，所以可以列出描述式：
+         * 1、map[i][j] = map[i-1][j] + map[i][j-1]   i,j >1
+         * 2、map[i][j] = 1                           i=1或者j=1
+         * 根据描述式，自底向上求出所有中间值，map[m][n]就是返回值。
+</pre>
+{% highlight c++ %}
+class Solution {
+    public:
+        /* 
+         * 这道题目既可以用DP解答，也可以用排列解
+         * 下面的代码使用DP的方法来解答：
+         * 由题意值，走的方向只有两个，右和下。所以，任意位置map[i][j]的上一步可能是两个位置：
+         * map[i-1][j]或者map[i][j-1]，所以可以列出描述式：
+         * 1、map[i][j] = map[i-1][j] + map[i][j-1]   i,j >1
+         * 2、map[i][j] = 1                           i=1或者j=1
+         * 根据描述式，自底向上求出所有中间值，map[m][n]就是返回值。
+         *
+         * */
+        int uniquePaths(int m, int n) {
+            // IMPORTANT: Please reset any member data you declared, as
+            // the same Solution instance will be reused for each test case.
+            if(!m || !n)    return 0;
+            if(m == 1 || n==1)      return 1;
+            long long tables[101][101] = {0};
+            tables[1][1] = 1;
+            for(int row = 1; row <= m; row++)
+                tables[row][1] = 1;
+            for(int col = 1; col <= n; col++)
+                tables[1][col] = 1;
+            for(int row = 2; row <= m; row++)
+                for(int col = 2; col <= n; col++)
+                    tables[row][col] = tables[row-1][col] + tables[row][col-1];
+            return tables[m][n];
+        }
+};
+{% endhighlight %}
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>

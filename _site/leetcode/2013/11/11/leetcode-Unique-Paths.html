@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Leetcode----Unique-Paths dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Unique-Pathsdariusdong,dongyuchi,blog,logs,博客"/>
+        <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
+		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
+        <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
+        <link href="http://www.ifdong.com/css/pygments.css" rel="stylesheet" type="text/css" />
+        <link href="/prettify/prettify.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/favicon.ico"/>
+		<link rel="bookmark" href="/favicon.ico"/>
+		<script type="text/javascript" src="/jquery.js"></script>
+		<script type="text/javascript" src="/prettify/prettify.js"></script>
+</head>
+<body>
+        <div class="wrap">
+		<div class="header radius black">
+			<h2><a href="http://www.ifdong.com">dariusdong's BLOG</a></h2>
+            <span class="right">
+                以俺多年种田的经验来看，神马都略懂一点，生活才多彩一点……猪葛亮说的……
+            </span>
+		</div>
+
+	<div class="main">
+		<div class="postbox radius">
+            <h2 class="first_title">Leetcode----Unique-Paths</h2>
+            <p class="posted_info">
+                posted by 董三 on 2013-11-11 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
+            </p>
+            <div class="postcontent">
+			<p>
+    <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Unique-Paths
+</h2>
+<pre class="prettyprint">
+A robot is located at the top-left corner of a m x n grid (marked 'Start' in the diagram below).
+
+The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked 'Finish' in the diagram below).
+
+How many possible unique paths are there?
+Above is a 3 x 7 grid. How many possible unique paths are there? 
+
+<font color="red">Note: m and n will be at most 100.</font>
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题目的意思是，有一个m*n的各自，机器人从左上方的(1,1)为起点，每一步只能往下走或者往右走，走到右下角一共有多少条路？</p>
+<font color="red">这道题目既可以用DP解答，也可以用排列解.</font>
+
+<h2 class="content_h2">Code</h2>
+<h3>使用排列来解答(ACCEPT)</h3>
+<pre class="prettyprint">
+      * 下面的代码使用了排列的方法来解答：
+      * 由排列的知识，显然可知，从起点map[1][1]到终点map[m][n]一共需向下走m-1次，向右走n-1次
+      * 只需要计算出这m-1+n-1次的全排列次数即可。
+      * 由于m-1次下有重复，n-1次右也有重复，因此全排列次数为：P(m-1+n-1)/(P(m-1)*P(n-1))
+</pre>
+<div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+ <span class="nl">public:</span>
+     <span class="cm">/* </span>
+<span class="cm">      * 这道题目既可以用DP解答，也可以用排列解</span>
+<span class="cm">      * 下面的代码使用了排列的方法来解答：</span>
+<span class="cm">      * 由排列的知识，显然可知，从起点map[1][1]到终点map[m][n]一共需向下走m-1次，向右走n-1次</span>
+<span class="cm">      * 只需要计算出这m-1+n-1次的全排列次数即可。</span>
+<span class="cm">      * 由于m-1次下有重复，n-1次右也有重复，因此全排列次数为：P(m-1+n-1)/(P(m-1)*P(n-1))</span>
+<span class="cm">      * */</span>
+     <span class="kt">int</span> <span class="n">uniquePaths</span><span class="p">(</span><span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+         <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
+         <span class="c1">// the same Solution instance will be reused for each test case.</span>
+         <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">m</span> <span class="o">||</span> <span class="o">!</span><span class="n">n</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+         <span class="k">if</span><span class="p">(</span><span class="n">m</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">n</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>     <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+         <span class="kt">long</span> <span class="kt">long</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+         <span class="kt">int</span> <span class="n">alignSteps</span> <span class="o">=</span> <span class="n">m</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+         <span class="kt">int</span> <span class="n">verticalSteps</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+         <span class="k">if</span><span class="p">(</span><span class="n">alignSteps</span> <span class="o">&lt;</span> <span class="n">verticalSteps</span><span class="p">)</span>
+         <span class="p">{</span>
+             <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">alignSteps</span><span class="p">;</span>
+             <span class="n">alignSteps</span> <span class="o">=</span> <span class="n">verticalSteps</span><span class="p">;</span>
+             <span class="n">verticalSteps</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+         <span class="p">}</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">alignSteps</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span><span class="n">verticalSteps</span><span class="o">+</span><span class="n">alignSteps</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">*=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">verticalSteps</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">/=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+     <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<h3>使用DP来解答(ACCEPT)</h3>
+<pre class="prettyprint">
+         * 下面的代码使用DP的方法来解答：
+         * 由题意值，走的方向只有两个，右和下。所以，任意位置map[i][j]的上一步可能是两个位置：
+         * map[i-1][j]或者map[i][j-1]，所以可以列出描述式：
+         * 1、map[i][j] = map[i-1][j] + map[i][j-1]   i,j >1
+         * 2、map[i][j] = 1                           i=1或者j=1
+         * 根据描述式，自底向上求出所有中间值，map[m][n]就是返回值。
+</pre>
+<div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="nl">public:</span>
+        <span class="cm">/* </span>
+<span class="cm">         * 这道题目既可以用DP解答，也可以用排列解</span>
+<span class="cm">         * 下面的代码使用DP的方法来解答：</span>
+<span class="cm">         * 由题意值，走的方向只有两个，右和下。所以，任意位置map[i][j]的上一步可能是两个位置：</span>
+<span class="cm">         * map[i-1][j]或者map[i][j-1]，所以可以列出描述式：</span>
+<span class="cm">         * 1、map[i][j] = map[i-1][j] + map[i][j-1]   i,j &gt;1</span>
+<span class="cm">         * 2、map[i][j] = 1                           i=1或者j=1</span>
+<span class="cm">         * 根据描述式，自底向上求出所有中间值，map[m][n]就是返回值。</span>
+<span class="cm">         *</span>
+<span class="cm">         * */</span>
+        <span class="kt">int</span> <span class="n">uniquePaths</span><span class="p">(</span><span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
+            <span class="c1">// the same Solution instance will be reused for each test case.</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">m</span> <span class="o">||</span> <span class="o">!</span><span class="n">n</span><span class="p">)</span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">m</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">n</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>      <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="kt">long</span> <span class="kt">long</span> <span class="n">tables</span><span class="p">[</span><span class="mi">101</span><span class="p">][</span><span class="mi">101</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+            <span class="n">tables</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">row</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">row</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="n">row</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">tables</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">col</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">col</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">col</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">tables</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">row</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">row</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="n">row</span><span class="o">++</span><span class="p">)</span>
+                <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">col</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">col</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">col</span><span class="o">++</span><span class="p">)</span>
+                    <span class="n">tables</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="p">[</span><span class="n">row</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">+</span> <span class="n">tables</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+            <span class="k">return</span> <span class="n">tables</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="n">n</span><span class="p">];</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="http://www.ifdong.com/images/download.jpg" alt="pic" />
+    </a>
+</p>
+
+            </div>
+            
+    		<div class="likepost">
+    			<h2>相关日志</h2>
+    			<ul>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/11/leetcode-Unique-Paths.html">Leetcode----Unique-Paths</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/11/leetcode-Triangle.html">Leetcode----Triangle</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/10/leetcode-Edit-Distance.html">Leetcode----Edit Distance</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Valid-Parentheses.html">Leetcode----Valid Parentheses</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Valid-Palindrome.html">Leetcode----Valid Palindrome</a></li>
+    				
+    			</ul>
+    		</div>
+        <!-- UY BEGIN -->
+        <div id="uyan_frame"></div>
+        <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1850163"></script>
+        <!-- UY END -->
+	</div>
+		<div class="blank20"></div>
+                <div class="footer radius">
+                        &copy; 董三(dariusdong) 2013 Powered by GitHub <a href="https://github.com/mojombo/jekyll" target="_blank">jekyll</a>
+                </div>
+		<div style="display:none;">
+		<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F751292173225837a2688c4185dd750d6' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		</div>
+        </div>
+</body>
+</html>
+
+
