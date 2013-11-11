@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Leetcode----Triangle dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Triangledariusdong,dongyuchi,blog,logs,博客"/>
+        <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
+		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
+        <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
+        <link href="http://www.ifdong.com/css/pygments.css" rel="stylesheet" type="text/css" />
+        <link href="/prettify/prettify.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/favicon.ico"/>
+		<link rel="bookmark" href="/favicon.ico"/>
+		<script type="text/javascript" src="/jquery.js"></script>
+		<script type="text/javascript" src="/prettify/prettify.js"></script>
+</head>
+<body>
+        <div class="wrap">
+		<div class="header radius black">
+			<h2><a href="http://www.ifdong.com">dariusdong's BLOG</a></h2>
+            <span class="right">
+                以俺多年种田的经验来看，神马都略懂一点，生活才多彩一点……猪葛亮说的……
+            </span>
+		</div>
+
+	<div class="main">
+		<div class="postbox radius">
+            <h2 class="first_title">Leetcode----Triangle</h2>
+            <p class="posted_info">
+                posted by 董三 on 2013-11-11 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
+            </p>
+            <div class="postcontent">
+			<p>
+    <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Triangle
+</h2>
+<pre class="prettyprint">
+Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
+
+For example, given the following triangle
+[
+     [<font color="red">2</font>],
+    [<font color="red">3</font>,4],
+   [6,<font color="red">5</font>,7],
+  [4,<font color="red">1</font>,8,3]
+]
+The minimum path sum from top to bottom is 11 (i.e., 2 + 3 + 5 + 1 = 11). 
+
+Note:
+ Bonus point if you are able to do this using only O(n) extra space, where n is the total number of rows in the triangle. 
+
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题目的意思是，给定一个包含数字数组的三角形，找出自顶向下所有路径的最小和，每一行的数字只能和下一行相邻的两个数字移动。</p>
+
+<pre class="prettyprint">
+         * 典型的DP问题
+         * 可以看到每个数字triangle[i][j]在下一行都有两个相邻数字triangle[i+1][j]和triangle[i+1][j+1]
+         * 借助于修改输入的triangle作为存储容器，自底向上，更新所有位置的minimumTotal
+         * 每个位置的minimumTotal应该是原来元素triangle[i][j]的值加上min(triangle[i+1][j],triangle[i+1][j+1])
+         * 新的triangle[0][0]就是要求的结果
+</pre>
+<h2 class="content_h2">Code</h2>
+<div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+    <span class="nl">public:</span>
+        <span class="cm">/* </span>
+<span class="cm">         * 典型的DP问题</span>
+<span class="cm">         * 可以看到每个数字triangle[i][j]在下一行都有两个相邻数字triangle[i+1][j]和triangle[i+1][j+1]</span>
+<span class="cm">         * 借助于修改输入的triangle作为存储容器，自底向上，更新所有位置的minimumTotal</span>
+<span class="cm">         * 每个位置的minimumTotal应该是原来元素triangle[i][j]的值加上min(triangle[i+1][j],triangle[i+1][j+1])</span>
+<span class="cm">         * 新的triangle[0][0]就是要求的结果</span>
+<span class="cm">         * */</span>
+        <span class="kt">int</span> <span class="n">minimumTotal</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">triangle</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
+            <span class="c1">// the same Solution instance will be reused for each test case.</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">triangle</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">row</span> <span class="o">=</span> <span class="n">triangle</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="n">row</span> <span class="o">&gt;=</span><span class="mi">0</span><span class="p">;</span> <span class="n">row</span><span class="o">--</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">col</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="n">triangle</span><span class="p">[</span><span class="n">row</span><span class="p">].</span><span class="n">size</span><span class="p">();</span> <span class="n">col</span><span class="o">++</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="c1">//更新minimum值</span>
+                    <span class="n">triangle</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">+=</span> <span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">(</span><span class="n">triangle</span><span class="p">[</span><span class="n">row</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">col</span><span class="p">],</span> <span class="n">triangle</span><span class="p">[</span><span class="n">row</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">col</span><span class="o">+</span><span class="mi">1</span><span class="p">]);</span> 
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">triangle</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="http://www.ifdong.com/images/download.jpg" alt="pic" />
+    </a>
+</p>
+
+            </div>
+            
+    		<div class="likepost">
+    			<h2>相关日志</h2>
+    			<ul>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/11/leetcode-Triangle.html">Leetcode----Triangle</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/10/leetcode-Edit-Distance.html">Leetcode----Edit Distance</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Valid-Parentheses.html">Leetcode----Valid Parentheses</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Valid-Palindrome.html">Leetcode----Valid Palindrome</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Path-Sum.html">Leetcode----Path Sum</a></li>
+    				
+    			</ul>
+    		</div>
+        <!-- UY BEGIN -->
+        <div id="uyan_frame"></div>
+        <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1850163"></script>
+        <!-- UY END -->
+	</div>
+		<div class="blank20"></div>
+                <div class="footer radius">
+                        &copy; 董三(dariusdong) 2013 Powered by GitHub <a href="https://github.com/mojombo/jekyll" target="_blank">jekyll</a>
+                </div>
+		<div style="display:none;">
+		<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F751292173225837a2688c4185dd750d6' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		</div>
+        </div>
+</body>
+</html>
+
+
