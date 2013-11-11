@@ -1,0 +1,59 @@
+---
+layout: post
+title: Leetcode----Minimum Depth of Binary Tree
+category: leetcode
+description: leetcode oj题目:Minimum Depth of Binary Tree; Given a binary tree, find its minimum depth.The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
+img: 201311/20131101.jpg
+keywords: leetcode, Minimum Depth of Binary Tree, DP, Recurse
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Minimum Depth of Binary Tree
+</h2>
+<pre class="prettyprint">
+Given a binary tree, find its minimum depth.
+
+The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>&nbsp;&nbsp;题目的意思是，给定一棵二叉树，求出它的最小深度。</p>
+
+<pre class="prettyprint"><font color="red">
+     * 对树的问题，大多都可以使用递归来解决
+     * 思路很清晰，编码也比较简单 </font>
+</pre>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+class Solution {
+public:
+    /* 
+     * 对树的问题，大多都可以使用递归来解决
+     * 思路很清晰，编码也比较简单 
+     * */
+    int minDepth(TreeNode *root) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        if(!root) return 0;
+        int lChildDepth = 0, rChildDepth = 0;
+        if(root->left)
+            lChildDepth = minDepth(root->left);
+        if(root->right)
+            rChildDepth = minDepth(root->right);
+        if(root->left && root->right)
+            return 1 + std::min(lChildDepth, rChildDepth);
+        if(root->left)
+            return 1 + lChildDepth;
+        if(root->right)
+            return 1 + rChildDepth;
+        return 1;
+    }
+};
+{% endhighlight %}
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>
