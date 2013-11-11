@@ -28,7 +28,7 @@ Above is a 3 x 7 grid. How many possible unique paths are there?
 <font color="red">这道题目既可以用DP解答，也可以用排列解.</font>
 
 <h2 class="content_h2">Code</h2>
-<h3>使用排列来解答(ACCEPT)</h3>
+<h3>1、使用排列来解答(ACCEPT)</h3>
 <pre class="prettyprint">
       * 下面的代码使用了排列的方法来解答：
       * 由排列的知识，显然可知，从起点map[1][1]到终点map[m][n]一共需向下走m-1次，向右走n-1次
@@ -67,7 +67,7 @@ class Solution {
      }
 };
 {% endhighlight %}
-<h3>使用DP来解答(ACCEPT)</h3>
+<h3>2、使用DP来解答(ACCEPT)</h3>
 <pre class="prettyprint">
          * 下面的代码使用DP的方法来解答：
          * 由题意值，走的方向只有两个，右和下。所以，任意位置map[i][j]的上一步可能是两个位置：
