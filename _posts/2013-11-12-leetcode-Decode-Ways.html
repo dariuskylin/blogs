@@ -31,15 +31,13 @@ The number of ways decoding "12" is 2.
 <h2 class="content_h2">分析</h2>
 <p>&nbsp;&nbsp;题目的意思是，给定一个字符与数字的映射规则，一个字符串会有多少种可能的原码。</p>
 
-<pre class="prettyprint">
-    <font color="red">
+<pre class="prettyprint"><font color="red">
      * 题目显然是一道DP的题目，用D(n)表示字符串s[1,2,...,n]的解码个数，那么有关系：
      * 1、D(n) = D(n-1) + D(n-2)    当字符s[n]和双字符字符s[n-1,n]都有效时
      * 2、D(n) = D(n-1)             仅有字符s[n]有效时
      * 3、D(n) = D(n-2)              仅有双字符s[n-1,n]有效时
      * 4、D(n) = 0                  其他情况
-     * 在判断符合哪种情况时，容易疏漏很多细节，需要考虑较多的特例。
-     </font>
+     * 在判断符合哪种情况时，容易疏漏很多细节，需要考虑较多的特例。</font>
 </pre>
 <h2 class="content_h2">Code</h2>
 {% highlight c++ %}
