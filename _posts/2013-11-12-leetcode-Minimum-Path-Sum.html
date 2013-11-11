@@ -1,0 +1,63 @@
+---
+layout: post
+title: Leetcode----Minimum Path Sum
+category: leetcode
+description: leetcode oj题目:Minimum Path Sum; Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the sum of all numbers along its path.
+img: 201311/20131101.jpg
+keywords: leetcode, Minimum Path Sum, DP
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Minimum Path Sum
+</h2>
+<pre class="prettyprint">
+Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the sum of all numbers along its path.
+<font color="red">
+Note: You can only move either down or right at any point in time.</font>
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>&nbsp;&nbsp;题目的意思是，给定一个m*n的格子，每个格子有一个非负整数，找一条从左上到右下的路线，使这条路线经过的整数和最小。</p>
+
+<pre class="prettyprint"><font color="red">
+     * 典型DP问题，自左至右，自底向上按部就班即可</font>
+</pre>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+class Solution {
+public:
+    /* 
+     * 典型DP问题，自左至右，自底向上按部就班即可
+     *
+     * */
+    int minPathSum(vector<vector<int> > &grid) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        if(grid.size() == 0)    return 0;
+        int rows = grid.size();
+        int cols = grid[0].size();
+        vector<int> tempRow(cols, 0);
+        vector<vector<int> > tables(rows, tempRow);
+        tables[0][0] = grid[0][0];
+        for(int i = 1; i < rows; i++)
+            tables[i][0] = grid[i][0] + tables[i-1][0];
+        for(int i = 1; i < cols; i++)
+            tables[0][i] = grid[0][i] + tables[0][i-1];
+        for(int i = 1; i < rows; i++)
+        {
+            for(int j = 1; j < cols; j++)
+            {
+                tables[i][j] = grid[i][j] + std::min(tables[i-1][j], tables[i][j-1]);
+            }
+        } 
+        return tables[rows-1][cols-1];
+    }
+};
+{% endhighlight %}
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>
