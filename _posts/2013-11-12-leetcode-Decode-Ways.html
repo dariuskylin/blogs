@@ -1,0 +1,97 @@
+---
+layout: post
+title: Leetcode----Decode Ways
+category: leetcode
+description: leetcode oj题目:Decode Ways; Given an encoded message containing digits, determine the total number of ways to decode it. 
+img: 201311/20131101.jpg
+keywords: leetcode, Decode Ways, DP
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Decode Ways
+</h2>
+<pre class="prettyprint">
+A message containing letters from <font color="red">A</font>-<font color="red">Z</font> is being encoded to numbers using the following mapping: 
+<font color="red">
+'A' -> 1
+'B' -> 2
+...
+'Z' -> 26
+</font>
+Given an encoded message containing digits, determine the total number of ways to decode it. 
+
+For example,
+ Given encoded message "12", it could be decoded as "AB" (1 2) or "L" (12). 
+
+The number of ways decoding "12" is 2. 
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>&nbsp;&nbsp;题目的意思是，给定一个字符与数字的映射规则，一个字符串会有多少种可能的原码。</p>
+
+<pre class="prettyprint">
+    <font color="red">
+     * 题目显然是一道DP的题目，用D(n)表示字符串s[1,2,...,n]的解码个数，那么有关系：
+     * 1、D(n) = D(n-1) + D(n-2)    当字符s[n]和双字符字符s[n-1,n]都有效时
+     * 2、D(n) = D(n-1)             仅有字符s[n]有效时
+     * 3、D(n) = D(n-2)              仅有双字符s[n-1,n]有效时
+     * 4、D(n) = 0                  其他情况
+     * 在判断符合哪种情况时，容易疏漏很多细节，需要考虑较多的特例。
+     </font>
+</pre>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+class Solution {
+public:
+    /* 
+     * 题目显然是一道DP的题目，用D(n)表示字符串s[1,2,...,n]的解码个数，那么有关系：
+     * 1、D(n) = D(n-1) + D(n-2)    当字符s[n]和双字符字符s[n-1,n]都有效时
+     * 2、D(n) = D(n-1)             仅有字符s[n]有效时
+     * 3、D(n) = D(n-2)              仅有双字符s[n-1,n]有效时
+     * 4、D(n) = 0                  其他情况
+     * 在判断符合哪种情况时，容易疏漏很多细节，需要考虑较多的特例。
+     * */
+    int numDecodings(string s) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        if(s.size() == 0)   return 0;
+        if(s.size() == 1 && s[0] == '0')    return 0;
+        if(s.size() == 1)   return 1;
+        //必须判断，不然如“00”就会被漏掉
+        if(s[0] == '0')     return 0;
+        vector<int> numSeqs(s.size() + 1);
+        numSeqs[0] = 1;
+        numSeqs[1] = 1;
+        int twoBitOk = 1;
+        int oneBitOk = 1;
+        for(int i = 2; i <= s.size(); i++)
+        {
+            if(s[i-2] == '1'||((s[i-2] == '2')&&(s[i-1] < '7')))
+                twoBitOk = 1;
+            else 
+                twoBitOk = 0;
+            if(s[i-1] != '0')
+                oneBitOk = 1;
+            else 
+                oneBitOk = 0;
+            if(oneBitOk && twoBitOk)
+                numSeqs[i] = numSeqs[i-1] + numSeqs[i-2];
+            else if(oneBitOk)
+                numSeqs[i] = numSeqs[i-1];
+            else if(twoBitOk)
+                numSeqs[i] = numSeqs[i-2];
+            else
+                return 0;
+
+        }
+        return numSeqs[s.size()];
+    }
+};
+{% endhighlight %}
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>
