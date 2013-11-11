@@ -31,7 +31,7 @@ The total number of unique paths is <font color="red">2</font>.
 <h2 class="content_h2">分析</h2>
 <p>&nbsp;&nbsp;题目的意思是，有一个m*n的格子，机器人从左上方的(1,1)为起点，每一步只能往下走或者往右走，格子可能有障碍不能通过，‘1’表示有障碍，‘0’表示没有障碍。走到右下角一共有多少条路？</p>
 <font color="red">
-    &nbsp;&nbsp;这道题目之前的<font color="red">“<a href="../../../2013/11/03/leetcode-Unique-Paths.html">Unique Paths</a>”</font>的变形，上一道题既可以用DP解答，也可以用排列解. 但是这道题用DP会好很多：<br/>
+    &nbsp;&nbsp;这道题目之前的<font color="red">“<a href="../../../2013/11/11/leetcode-Unique-Paths.html">Unique Paths</a>”</font>的变形，上一道题既可以用DP解答，也可以用排列解. 但是这道题用DP会好很多：<br/>
  </font>
     &nbsp;&nbsp;障碍物若是只有几个，且个数是固定的，可以用排列来做。比如当只有1个障碍物时，将无障碍的路总数量-经过障碍点的路的数量；2个障碍物时，无障碍的路总数量-经过障碍1的路的数量-经过障碍2的路数量+同时经过2个障碍的路数量。由此可看，当障碍物一多，或者障碍物不确定时，用排列非常麻烦。
 <br/>
