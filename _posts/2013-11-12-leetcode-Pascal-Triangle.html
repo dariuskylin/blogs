@@ -1,0 +1,72 @@
+---
+layout: post
+title: Leetcode----Pascal's Triangle
+category: leetcode
+description: leetcode oj题目:Pascal's Triangle; Given numRows, generate the first numRows of Pascal's triangle.
+img: 201311/20131101.jpg
+keywords: leetcode, Pascal's Triangle
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Pascal's Triangle
+</h2>
+<pre class="prettyprint">
+Given numRows, generate the first numRows of Pascal's triangle.
+
+For example, given numRows = 5,
+ Return 
+<font color="red">[
+     [1],
+    [1,1],
+   [1,2,1],
+  [1,3,3,1],
+ [1,4,6,4,1]
+]</font>
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>&nbsp;&nbsp;题目的意思是，给定一个整数N，输出N行的Pascal Triangle。</p>
+
+<pre class="prettyprint"><font color="red">
+    * 一道简单的模拟生成题，单纯的程序设计，没有什么算法牵扯。
+     * 需要注意的是，当输入为0， 1， 2，的时候。</font>
+</pre>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+class Solution {
+public:
+    /* 
+     * 一道简单的模拟生成题，单纯的程序设计，没有什么算法牵扯。
+     * 需要注意的是，当输入为0， 1， 2，的时候。
+     *
+     * */
+    vector<vector<int> > generate(int numRows) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        vector<vector<int> > retRows;
+        if(!numRows)    return retRows;
+        vector<int> row1(1, 1);
+        retRows.push_back(row1);
+        if(numRows == 1)    return retRows;
+        vector<int> row2(2, 1);
+        retRows.push_back(row2);
+        if(numRows == 2)    return retRows;
+        //从3开始，生成开始有规律
+        for(int rowSeq = 3; rowSeq <= numRows; rowSeq++)
+        {
+            vector<int> tempRow(rowSeq, 1);
+            for(int i = 1; i < rowSeq-1; i++)
+                tempRow[i] = retRows[rowSeq-2][i-1] + retRows[rowSeq-2][i];
+            retRows.push_back(tempRow);
+        }
+        return retRows;
+    }
+};
+{% endhighlight %}
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>
