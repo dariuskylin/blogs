@@ -1,0 +1,84 @@
+---
+layout: post
+title: Leetcode----Add Binary
+category: leetcode
+description: leetcode oj题目:Add Binary; Given two binary strings, return their sum (also a binary string). 
+img: 201311/20131101.jpg
+keywords: leetcode, Add Binary, Simple
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Add Binary
+</h2>
+<pre class="prettyprint">
+Given two binary strings, return their sum (also a binary string). 
+
+For example,
+ a = "<font color="red">11</font>"
+ b = "<font color="red">1</font>"
+ Return "<font color="red">100</font>". 
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>&nbsp;&nbsp;题目的意思是，给定两个只包含字符‘0’和‘1’的字符串，返回表示它们的二进制和的字符串。</p>
+
+<pre class="prettyprint"><font color="red">
+     * 一道很简单的程序设计题目。</font>
+</pre>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+class Solution {
+public:
+    /* 
+     * 简单的程序设计题目
+     *
+     * */
+    string addBinary(string a, string b) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        int len_a = a.size();
+        int len_b = b.size();
+        if(!len_a)  return b;
+        if(!len_b)  return a;
+        //返回的和字符串长度应该不超过a和b最大长度+1
+        int len_sumStr = std::max(len_a, len_b) + 1;
+        string sumStr(len_sumStr, '0');
+        int pSum = len_sumStr-1, pA = len_a -1, pB = len_b - 1;
+        int carry = 0;
+        int lhs, rhs, tempSum;
+        while(len_a >= 0 || len_b >= 0)
+        {
+            if(len_a >= 0)
+                lhs = a[len_a] - '0';
+            else
+                lhs = 0;
+            if(len_b >= 0)
+                rhs = b[len_b] - '0';
+            else
+                rhs = 0;
+            tempSum = lhs + rhs + carry;
+            if(tempSum > 1)
+                carry = 1, tempSum -= 2;
+            else
+                carry = 0;
+            sumStr[len_sumStr] = tempSum + '0';
+            len_a--, len_b--, len_sumStr--;         
+        }
+        if(carry)
+        {
+            sumStr[0] = '1';
+            return sumStr;
+        } 
+        //如果首位为0，需要去掉第一位，以非0开头
+        else
+           return sumStr.substr(1, len_sumStr-1); 
+    }
+};
+{% endhighlight %}
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>
