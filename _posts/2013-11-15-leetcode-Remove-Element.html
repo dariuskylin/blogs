@@ -1,0 +1,48 @@
+---
+layout: post
+title: Leetcode----Remove Element
+category: leetcode
+description: leetcode oj题目:Remove Element; Given an array and a value, remove all instances of that value in place and return the new length.
+img: 201311/20131101.jpg
+keywords: leetcode, Remove Element, Simple
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Remove Element
+</h2>
+<pre class="prettyprint">
+Given an array and a value, remove all instances of that value in place and return the new length.
+
+The order of elements can be changed. It doesn't matter what you leave beyond the new length.
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>&nbsp;&nbsp;题目的意思是，给定一个数组和一个值，删除数组中所有等于那个值的元素，返回数组的新长度。</p>
+
+<pre class="prettyprint"><font color="red">
+     * 一道很简单的程序设计题目。
+     *设置一个游标，游标左边的元素都不等于elem</font>
+</pre>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+class Solution {
+public:
+    /*  设置一个游标，游标左边的元素都不等于elem */
+    int removeElement(int A[], int n, int elem) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        int index = 0;
+        for(int i = 0; i < n; ++i)
+            if(A[i] != elem)
+                A[index] = A[i], index++;
+        return index;
+    }
+};
+{% endhighlight %}
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>
