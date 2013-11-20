@@ -1,0 +1,80 @@
+---
+layout: post
+title: Leetcode----Validate Binary Search Tree
+category: leetcode
+description: leetcode oj题目:Validate Binary Search Tree; Given a binary tree, determine if it is a valid binary search tree (BST).
+img: 201311/20131101.jpg
+keywords: leetcode, Validate Binary Search Tree
+---
+
+<p>
+    <img src="{{ site:url }}/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+    Validate Binary Search Tree
+</h2>
+<pre class="prettyprint">
+Given a binary tree, determine if it is a valid binary search tree (BST).
+
+Assume a BST is defined as follows:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+The right subtree of a node contains only nodes with keys greater than the node's key.
+Both the left and right subtrees must also be binary search trees.
+confused what "{<font color="red">1,#,2,3</font>}" means?
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>题意是：验证二叉树是否是二叉搜索树</p>
+<p>
+    首先需要知道什么是二叉搜索树：
+    <ul>
+        <li>左节点小于根节点，右节点大于根节点；</li>
+        <li>左、右子树都是二叉搜索树；</li>
+    </ul>
+    根据二叉树的定义来看，第一条规则很容易判断，但是第二条规则，如何判断？<br/>
+    <font color="red">很简单，只要左子树的最右节点小于根节点，右子树的最左节点大于根节点即可。</font>
+</p>
+<h2 class="content_h2">Code</h2>
+{% highlight c++ %}
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    /* 
+     * 二叉搜索树的特点是左节点小于根节点，右子树大于根节点；左右子树也是二叉搜索树
+     * 
+     * */
+    bool isValidBST(TreeNode *root) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        if(!root)   return true;
+        if(!(root->left) && !(root->right))     return true;
+
+        TreeNode *mostLeftOfRchild , *mostRightOfLchild;
+        mostRightOfLchild = root->left;
+        while(mostRightOfLchild && (mostRightOfLchild->right) )
+            mostRightOfLchild = mostRightOfLchild->right;
+        if(mostRightOfLchild&&(mostRightOfLchild->val >= root->val) )
+            return false;
+        mostLeftOfRchild = root->right;
+        while(mostLeftOfRchild && (mostLeftOfRchild->left) )
+            mostLeftOfRchild = mostLeftOfRchild->left;
+        if(mostLeftOfRchild&&(mostLeftOfRchild->val <= root->val) )
+            return false;   
+        return isValidBST(root->left)&&isValidBST(root->right);
+    }
+};
+{% endhighlight %}
+
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="{{ site:url }}/images/download.jpg" alt="pic" />
+    </a>
+</p>
