@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Leetcode----Decode Ways dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Decode Ways, DPdariusdong,dongyuchi,blog,logs,博客"/>
+        <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
+		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
+        <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
+        <link href="http://www.ifdong.com/css/pygments.css" rel="stylesheet" type="text/css" />
+        <link href="/prettify/prettify.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/favicon.ico"/>
+		<link rel="bookmark" href="/favicon.ico"/>
+		<script type="text/javascript" src="/jquery.js"></script>
+		<script type="text/javascript" src="/prettify/prettify.js"></script>
+</head>
+<body>
+        <div class="wrap">
+		<div class="header radius black">
+			<h2><a href="http://www.ifdong.com">dariusdong's BLOG</a></h2>
+            <span class="right">
+                以俺多年种田的经验来看，神马都略懂一点，生活才多彩一点……猪葛亮说的……
+            </span>
+		</div>
+
+	<div class="main">
+		<div class="postbox radius">
+            <h2 class="first_title">Leetcode----Decode Ways</h2>
+            <p class="posted_info">
+                posted by 董三 on 2013-11-12 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
+            </p>
+            <div class="postcontent">
+			<p>
+    <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Decode Ways
+</h2>
+<pre class="prettyprint">
+A message containing letters from <font color="red">A</font>-<font color="red">Z</font> is being encoded to numbers using the following mapping: 
+<font color="red">
+'A' -> 1
+'B' -> 2
+...
+'Z' -> 26
+</font>
+Given an encoded message containing digits, determine the total number of ways to decode it. 
+
+For example,
+ Given encoded message "12", it could be decoded as "AB" (1 2) or "L" (12). 
+
+The number of ways decoding "12" is 2. 
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>&nbsp;&nbsp;题目的意思是，给定一个字符与数字的映射规则，一个字符串会有多少种可能的原码。</p>
+
+<pre class="prettyprint"><font color="red">
+     * 题目显然是一道DP的题目，用D(n)表示字符串s[1,2,...,n]的解码个数，那么有关系：
+     * 1、D(n) = D(n-1) + D(n-2)    当字符s[n]和双字符字符s[n-1,n]都有效时
+     * 2、D(n) = D(n-1)             仅有字符s[n]有效时
+     * 3、D(n) = D(n-2)              仅有双字符s[n-1,n]有效时
+     * 4、D(n) = 0                  其他情况
+     * 在判断符合哪种情况时，容易疏漏很多细节，需要考虑较多的特例。</font>
+</pre>
+<h2 class="content_h2">Code</h2>
+<div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="cm">/* </span>
+<span class="cm">     * 题目显然是一道DP的题目，用D(n)表示字符串s[1,2,...,n]的解码个数，那么有关系：</span>
+<span class="cm">     * 1、D(n) = D(n-1) + D(n-2)    当字符s[n]和双字符字符s[n-1,n]都有效时</span>
+<span class="cm">     * 2、D(n) = D(n-1)             仅有字符s[n]有效时</span>
+<span class="cm">     * 3、D(n) = D(n-2)              仅有双字符s[n-1,n]有效时</span>
+<span class="cm">     * 4、D(n) = 0                  其他情况</span>
+<span class="cm">     * 在判断符合哪种情况时，容易疏漏很多细节，需要考虑较多的特例。</span>
+<span class="cm">     * */</span>
+    <span class="kt">int</span> <span class="n">numDecodings</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
+        <span class="c1">// the same Solution instance will be reused for each test case.</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;0&#39;</span><span class="p">)</span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>   <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="c1">//必须判断，不然如“00”就会被漏掉</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;0&#39;</span><span class="p">)</span>     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">numSeqs</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">numSeqs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">numSeqs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">twoBitOk</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">oneBitOk</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;1&#39;</span><span class="o">||</span><span class="p">((</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;2&#39;</span><span class="p">)</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="sc">&#39;7&#39;</span><span class="p">)))</span>
+                <span class="n">twoBitOk</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">else</span> 
+                <span class="n">twoBitOk</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;0&#39;</span><span class="p">)</span>
+                <span class="n">oneBitOk</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">else</span> 
+                <span class="n">oneBitOk</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">oneBitOk</span> <span class="o">&amp;&amp;</span> <span class="n">twoBitOk</span><span class="p">)</span>
+                <span class="n">numSeqs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numSeqs</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">numSeqs</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">];</span>
+            <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">oneBitOk</span><span class="p">)</span>
+                <span class="n">numSeqs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numSeqs</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+            <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">twoBitOk</span><span class="p">)</span>
+                <span class="n">numSeqs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numSeqs</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">];</span>
+            <span class="k">else</span>
+                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">numSeqs</span><span class="p">[</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="http://www.ifdong.com/images/download.jpg" alt="pic" />
+    </a>
+</p>
+
+            </div>
+            
+    		<div class="likepost">
+    			<h2>相关日志</h2>
+    			<ul>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/20/leetcode-Remove-Duplicates-from-Sorted-Array-II.html">Leetcode----Remove Duplicates from Sorted Array II</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/15/leetcode-Remove-Element.html">Leetcode----Remove Element</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/13/leetcode-Add-Binary.html">Leetcode----Add Binary</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/12/leetcode-Remove-Nth-Node-From-End-of-List.html">Leetcode----Remove Nth Node From End of List</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/12/leetcode-Pascal-Triangle.html">Leetcode----Pascal's Triangle</a></li>
+    				
+    			</ul>
+    		</div>
+        <!-- UY BEGIN -->
+        <div id="uyan_frame"></div>
+        <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1850163"></script>
+        <!-- UY END -->
+	</div>
+		<div class="blank20"></div>
+                <div class="footer radius">
+                        &copy; 董三(dariusdong) 2013 Powered by GitHub <a href="https://github.com/mojombo/jekyll" target="_blank">jekyll</a>
+                </div>
+		<div style="display:none;">
+		<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F751292173225837a2688c4185dd750d6' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		</div>
+        </div>
+</body>
+</html>
+
+

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Leetcode----Add Binary dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Add Binary, Simpledariusdong,dongyuchi,blog,logs,博客"/>
+        <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
+		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
+        <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
+        <link href="http://www.ifdong.com/css/pygments.css" rel="stylesheet" type="text/css" />
+        <link href="/prettify/prettify.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/favicon.ico"/>
+		<link rel="bookmark" href="/favicon.ico"/>
+		<script type="text/javascript" src="/jquery.js"></script>
+		<script type="text/javascript" src="/prettify/prettify.js"></script>
+</head>
+<body>
+        <div class="wrap">
+		<div class="header radius black">
+			<h2><a href="http://www.ifdong.com">dariusdong's BLOG</a></h2>
+            <span class="right">
+                以俺多年种田的经验来看，神马都略懂一点，生活才多彩一点……猪葛亮说的……
+            </span>
+		</div>
+
+	<div class="main">
+		<div class="postbox radius">
+            <h2 class="first_title">Leetcode----Add Binary</h2>
+            <p class="posted_info">
+                posted by 董三 on 2013-11-13 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
+            </p>
+            <div class="postcontent">
+			<p>
+    <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Add Binary
+</h2>
+<pre class="prettyprint">
+Given two binary strings, return their sum (also a binary string). 
+
+For example,
+ a = "<font color="red">11</font>"
+ b = "<font color="red">1</font>"
+ Return "<font color="red">100</font>". 
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>&nbsp;&nbsp;题目的意思是，给定两个只包含字符‘0’和‘1’的字符串，返回表示它们的二进制和的字符串。</p>
+
+<pre class="prettyprint"><font color="red">
+     * 一道很简单的程序设计题目。</font>
+</pre>
+<h2 class="content_h2">Code</h2>
+<div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="cm">/* </span>
+<span class="cm">     * 简单的程序设计题目</span>
+<span class="cm">     *</span>
+<span class="cm">     * */</span>
+    <span class="n">string</span> <span class="n">addBinary</span><span class="p">(</span><span class="n">string</span> <span class="n">a</span><span class="p">,</span> <span class="n">string</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
+        <span class="c1">// the same Solution instance will be reused for each test case.</span>
+        <span class="kt">int</span> <span class="n">len_a</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">len_b</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">len_a</span><span class="p">)</span>  <span class="k">return</span> <span class="n">b</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">len_b</span><span class="p">)</span>  <span class="k">return</span> <span class="n">a</span><span class="p">;</span>
+        <span class="c1">//返回的和字符串长度应该不超过a和b最大长度+1</span>
+        <span class="kt">int</span> <span class="n">len_sumStr</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">len_a</span><span class="p">,</span> <span class="n">len_b</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">string</span> <span class="nf">sumStr</span><span class="p">(</span><span class="n">len_sumStr</span><span class="p">,</span> <span class="sc">&#39;0&#39;</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">pSum</span> <span class="o">=</span> <span class="n">len_sumStr</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pA</span> <span class="o">=</span> <span class="n">len_a</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pB</span> <span class="o">=</span> <span class="n">len_b</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">tempSum</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">len_a</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">len_b</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">len_a</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">lhs</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">len_a</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">lhs</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">len_b</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">rhs</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">len_b</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">rhs</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">tempSum</span> <span class="o">=</span> <span class="n">lhs</span> <span class="o">+</span> <span class="n">rhs</span> <span class="o">+</span> <span class="n">carry</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">tempSum</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">carry</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tempSum</span> <span class="o">-=</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">sumStr</span><span class="p">[</span><span class="n">len_sumStr</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempSum</span> <span class="o">+</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+            <span class="n">len_a</span><span class="o">--</span><span class="p">,</span> <span class="n">len_b</span><span class="o">--</span><span class="p">,</span> <span class="n">len_sumStr</span><span class="o">--</span><span class="p">;</span>         
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">carry</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">sumStr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;1&#39;</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">sumStr</span><span class="p">;</span>
+        <span class="p">}</span> 
+        <span class="c1">//如果首位为0，需要去掉第一位，以非0开头</span>
+        <span class="k">else</span>
+           <span class="k">return</span> <span class="n">sumStr</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">len_sumStr</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span> 
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="http://www.ifdong.com/images/download.jpg" alt="pic" />
+    </a>
+</p>
+
+            </div>
+            
+    		<div class="likepost">
+    			<h2>相关日志</h2>
+    			<ul>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/20/leetcode-Remove-Duplicates-from-Sorted-Array-II.html">Leetcode----Remove Duplicates from Sorted Array II</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/15/leetcode-Remove-Element.html">Leetcode----Remove Element</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/13/leetcode-Add-Binary.html">Leetcode----Add Binary</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/12/leetcode-Remove-Nth-Node-From-End-of-List.html">Leetcode----Remove Nth Node From End of List</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/12/leetcode-Pascal-Triangle.html">Leetcode----Pascal's Triangle</a></li>
+    				
+    			</ul>
+    		</div>
+        <!-- UY BEGIN -->
+        <div id="uyan_frame"></div>
+        <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1850163"></script>
+        <!-- UY END -->
+	</div>
+		<div class="blank20"></div>
+                <div class="footer radius">
+                        &copy; 董三(dariusdong) 2013 Powered by GitHub <a href="https://github.com/mojombo/jekyll" target="_blank">jekyll</a>
+                </div>
+		<div style="display:none;">
+		<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F751292173225837a2688c4185dd750d6' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		</div>
+        </div>
+</body>
+</html>
+
+

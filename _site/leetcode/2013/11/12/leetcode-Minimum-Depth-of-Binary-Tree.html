@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Leetcode----Minimum Depth of Binary Tree dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Minimum Depth of Binary Tree, DP, Recursedariusdong,dongyuchi,blog,logs,博客"/>
+        <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
+		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
+        <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
+        <link href="http://www.ifdong.com/css/pygments.css" rel="stylesheet" type="text/css" />
+        <link href="/prettify/prettify.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/favicon.ico"/>
+		<link rel="bookmark" href="/favicon.ico"/>
+		<script type="text/javascript" src="/jquery.js"></script>
+		<script type="text/javascript" src="/prettify/prettify.js"></script>
+</head>
+<body>
+        <div class="wrap">
+		<div class="header radius black">
+			<h2><a href="http://www.ifdong.com">dariusdong's BLOG</a></h2>
+            <span class="right">
+                以俺多年种田的经验来看，神马都略懂一点，生活才多彩一点……猪葛亮说的……
+            </span>
+		</div>
+
+	<div class="main">
+		<div class="postbox radius">
+            <h2 class="first_title">Leetcode----Minimum Depth of Binary Tree</h2>
+            <p class="posted_info">
+                posted by 董三 on 2013-11-12 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
+            </p>
+            <div class="postcontent">
+			<p>
+    <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Minimum Depth of Binary Tree
+</h2>
+<pre class="prettyprint">
+Given a binary tree, find its minimum depth.
+
+The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>&nbsp;&nbsp;题目的意思是，给定一棵二叉树，求出它的最小深度。</p>
+
+<pre class="prettyprint"><font color="red">
+     * 对树的问题，大多都可以使用递归来解决
+     * 思路很清晰，编码也比较简单 </font>
+</pre>
+<h2 class="content_h2">Code</h2>
+<div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="cm">/* </span>
+<span class="cm">     * 对树的问题，大多都可以使用递归来解决</span>
+<span class="cm">     * 思路很清晰，编码也比较简单 </span>
+<span class="cm">     * */</span>
+    <span class="kt">int</span> <span class="n">minDepth</span><span class="p">(</span><span class="n">TreeNode</span> <span class="o">*</span><span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
+        <span class="c1">// the same Solution instance will be reused for each test case.</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">root</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">lChildDepth</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rChildDepth</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span>
+            <span class="n">lChildDepth</span> <span class="o">=</span> <span class="n">minDepth</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span>
+            <span class="n">rChildDepth</span> <span class="o">=</span> <span class="n">minDepth</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">(</span><span class="n">lChildDepth</span><span class="p">,</span> <span class="n">rChildDepth</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">lChildDepth</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">rChildDepth</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="http://www.ifdong.com/images/download.jpg" alt="pic" />
+    </a>
+</p>
+
+            </div>
+            
+    		<div class="likepost">
+    			<h2>相关日志</h2>
+    			<ul>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/20/leetcode-Remove-Duplicates-from-Sorted-Array-II.html">Leetcode----Remove Duplicates from Sorted Array II</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/15/leetcode-Remove-Element.html">Leetcode----Remove Element</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/13/leetcode-Add-Binary.html">Leetcode----Add Binary</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/12/leetcode-Remove-Nth-Node-From-End-of-List.html">Leetcode----Remove Nth Node From End of List</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/12/leetcode-Pascal-Triangle.html">Leetcode----Pascal's Triangle</a></li>
+    				
+    			</ul>
+    		</div>
+        <!-- UY BEGIN -->
+        <div id="uyan_frame"></div>
+        <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1850163"></script>
+        <!-- UY END -->
+	</div>
+		<div class="blank20"></div>
+                <div class="footer radius">
+                        &copy; 董三(dariusdong) 2013 Powered by GitHub <a href="https://github.com/mojombo/jekyll" target="_blank">jekyll</a>
+                </div>
+		<div style="display:none;">
+		<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F751292173225837a2688c4185dd750d6' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		</div>
+        </div>
+</body>
+</html>
+
+

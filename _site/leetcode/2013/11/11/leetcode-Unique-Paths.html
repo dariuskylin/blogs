@@ -2,8 +2,8 @@
 <html>
 <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>Leetcode----Unique-Paths dariusdong's BLOG</title>
-        <meta name="keywords" content="leetcode, Unique-Pathsdariusdong,dongyuchi,blog,logs,博客"/>
+        <title>Leetcode----Unique Paths dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Unique Paths, DP, Permutationdariusdong,dongyuchi,blog,logs,博客"/>
         <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
 		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
         <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
@@ -25,7 +25,7 @@
 
 	<div class="main">
 		<div class="postbox radius">
-            <h2 class="first_title">Leetcode----Unique-Paths</h2>
+            <h2 class="first_title">Leetcode----Unique Paths</h2>
             <p class="posted_info">
                 posted by 董三 on 2013-11-11 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
             </p>
@@ -34,7 +34,7 @@
     <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
 </p>
 <h2 class = "content_h2">
-   Unique-Paths
+   Unique Paths
 </h2>
 <pre class="prettyprint">
 A robot is located at the top-left corner of a m x n grid (marked 'Start' in the diagram below).
@@ -47,11 +47,11 @@ Above is a 3 x 7 grid. How many possible unique paths are there?
 <font color="red">Note: m and n will be at most 100.</font>
 </pre>
 <h2 class="content_h2">分析</h2>
-<p>题目的意思是，有一个m*n的各自，机器人从左上方的(1,1)为起点，每一步只能往下走或者往右走，走到右下角一共有多少条路？</p>
+<p>题目的意思是，有一个m*n的格子，机器人从左上方的(1,1)为起点，每一步只能往下走或者往右走，走到右下角一共有多少条路？</p>
 <font color="red">这道题目既可以用DP解答，也可以用排列解.</font>
 
 <h2 class="content_h2">Code</h2>
-<h3>使用排列来解答(ACCEPT)</h3>
+<h3>1、使用排列来解答(ACCEPT)</h3>
 <pre class="prettyprint">
       * 下面的代码使用了排列的方法来解答：
       * 由排列的知识，显然可知，从起点map[1][1]到终点map[m][n]一共需向下走m-1次，向右走n-1次
@@ -89,7 +89,7 @@ Above is a 3 x 7 grid. How many possible unique paths are there?
      <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div>
-<h3>使用DP来解答(ACCEPT)</h3>
+<h3>2、使用DP来解答(ACCEPT)</h3>
 <pre class="prettyprint">
          * 下面的代码使用DP的方法来解答：
          * 由题意值，走的方向只有两个，右和下。所以，任意位置map[i][j]的上一步可能是两个位置：
@@ -140,15 +140,15 @@ Above is a 3 x 7 grid. How many possible unique paths are there?
     			<h2>相关日志</h2>
     			<ul>
     				
-    				<li><a href="http://www.ifdong.com/leetcode/2013/11/11/leetcode-Unique-Paths.html">Leetcode----Unique-Paths</a></li>
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/20/leetcode-Remove-Duplicates-from-Sorted-Array-II.html">Leetcode----Remove Duplicates from Sorted Array II</a></li>
     				
-    				<li><a href="http://www.ifdong.com/leetcode/2013/11/11/leetcode-Triangle.html">Leetcode----Triangle</a></li>
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/15/leetcode-Remove-Element.html">Leetcode----Remove Element</a></li>
     				
-    				<li><a href="http://www.ifdong.com/leetcode/2013/11/10/leetcode-Edit-Distance.html">Leetcode----Edit Distance</a></li>
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/13/leetcode-Add-Binary.html">Leetcode----Add Binary</a></li>
     				
-    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Valid-Parentheses.html">Leetcode----Valid Parentheses</a></li>
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/12/leetcode-Remove-Nth-Node-From-End-of-List.html">Leetcode----Remove Nth Node From End of List</a></li>
     				
-    				<li><a href="http://www.ifdong.com/leetcode/2013/11/08/leetcode-Valid-Palindrome.html">Leetcode----Valid Palindrome</a></li>
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/12/leetcode-Pascal-Triangle.html">Leetcode----Pascal's Triangle</a></li>
     				
     			</ul>
     		</div>

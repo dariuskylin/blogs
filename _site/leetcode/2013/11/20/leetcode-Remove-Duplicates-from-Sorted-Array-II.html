@@ -2,8 +2,8 @@
 <html>
 <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>Leetcode----Remove Duplicates from Sorted Array dariusdong's BLOG</title>
-        <meta name="keywords" content="leetcode, Remove Duplicates from Sorted Arraydariusdong,dongyuchi,blog,logs,博客"/>
+        <title>Leetcode----Remove Duplicates from Sorted Array II dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Remove Duplicates from Sorted Array IIdariusdong,dongyuchi,blog,logs,博客"/>
         <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
 		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
         <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
@@ -25,62 +25,66 @@
 
 	<div class="main">
 		<div class="postbox radius">
-            <h2 class="first_title">Leetcode----Remove Duplicates from Sorted Array</h2>
+            <h2 class="first_title">Leetcode----Remove Duplicates from Sorted Array II</h2>
             <p class="posted_info">
-                posted by 董三 on 2013-11-04 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
+                posted by 董三 on 2013-11-20 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
             </p>
             <div class="postcontent">
 			<p>
     <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
 </p>
 <h2 class = "content_h2">
-    Remove Duplicates from Sorted Array
+    Remove Duplicates from Sorted Array II
 </h2>
 <pre class="prettyprint">
-Given a sorted array, remove the duplicates in place such that each element appear only once and return the new length.
-
-Do not allocate extra space for another array, you must do this in place with constant memory. 
+Follow up for "Remove Duplicates":
+What if duplicates are allowed at most twice?
 
 For example,
- Given input array A = [1,1,2], 
+Given sorted array A = <font color="red">[1,1,1,2,2,3]</font>,
 
-Your function should return length = 2, and A is now [1,2].
+Your function should return length = <font color="red">5</font>, and A is now <font color="red">[1,1,2,2,3]</font>.
 </pre>
 <h2 class="content_h2">分析</h2>
-<p>题目的意思是，给定一个排序的整数数组，在数组中去除重复的元素，使原数组所有元素都仅出现1次，并返回元素的个数.</p>
-<pre class="prettyprint">
-    *题目已经要求不能使用额外空间，所以借助堆栈和其他数组的方法都不可行。
-    *设置两个指针，一个负责遍历输入数组的每个元素，一个指向去重后数组的元素。
-</pre>
+<p>题意是：继“Remove Duplicates from Sorted Array”，如果允许2个内的重复元素，调整数组，并返回元素个数。</p>
+<p>
+    这道题目是“<a href="../../../2013/11/04/leetcode-Remove-Duplicates-from-Sorted-Array.html">Remove Duplicates from Sorted Array</a>”的扩展，只需要在原来的基础上，在给新位置赋值时，添加一个判断，判断一下重复元素个数是否超过2.
+</p>
 <h2 class="content_h2">Code</h2>
 <div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="nl">public:</span>
     <span class="cm">/* </span>
-<span class="cm">     * 设置两个指针，一个指针负责遍历输入数组所有pos，一个指针负责指向去重后的数组pos</span>
+<span class="cm">     *  设置一个计数器统计重复元素出现的次数，超过2则去除</span>
 <span class="cm">     *</span>
 <span class="cm">     * */</span>
     <span class="kt">int</span> <span class="n">removeDuplicates</span><span class="p">(</span><span class="kt">int</span> <span class="n">A</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
         <span class="c1">// the same Solution instance will be reused for each test case.</span>
-        <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">A</span> <span class="o">||</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
-        <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> 
-        <span class="k">while</span><span class="p">(</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="p">)</span>
+        <span class="k">if</span><span class="p">(</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">MostAllowedNum</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+        <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">if</span><span class="p">(</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
-                <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="p">{</span>   
+                <span class="n">MostAllowedNum</span><span class="o">++</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">MostAllowedNum</span> <span class="o">&gt;</span> <span class="n">N</span><span class="p">)</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="k">else</span>
+                    <span class="n">A</span><span class="p">[</span><span class="n">start</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="p">}</span>
             <span class="k">else</span>
             <span class="p">{</span>
-                <span class="n">ret</span><span class="o">++</span><span class="p">;</span>
-                <span class="c1">// 给去重后的数组元素赋值</span>
-                <span class="n">A</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-                <span class="n">i</span><span class="o">++</span><span class="p">,</span> <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+                <span class="n">A</span><span class="p">[</span><span class="n">start</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="n">MostAllowedNum</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
             <span class="p">}</span>
-
         <span class="p">}</span>
-        <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+        <span class="c1">//for(int i = 0; i &lt;start; i++)</span>
+        <span class="c1">//  cout&lt;&lt;A[i]&lt;&lt;&quot;  &quot;;</span>
+        <span class="c1">//cout&lt;&lt;endl;</span>
+        <span class="k">return</span> <span class="n">start</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div>

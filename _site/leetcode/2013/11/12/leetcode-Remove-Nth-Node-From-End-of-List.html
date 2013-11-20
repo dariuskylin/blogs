@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Leetcode----Remove Nth Node From End of List dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Remove Nth Node From End of List, Two Pointdariusdong,dongyuchi,blog,logs,博客"/>
+        <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
+		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
+        <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
+        <link href="http://www.ifdong.com/css/pygments.css" rel="stylesheet" type="text/css" />
+        <link href="/prettify/prettify.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/favicon.ico"/>
+		<link rel="bookmark" href="/favicon.ico"/>
+		<script type="text/javascript" src="/jquery.js"></script>
+		<script type="text/javascript" src="/prettify/prettify.js"></script>
+</head>
+<body>
+        <div class="wrap">
+		<div class="header radius black">
+			<h2><a href="http://www.ifdong.com">dariusdong's BLOG</a></h2>
+            <span class="right">
+                以俺多年种田的经验来看，神马都略懂一点，生活才多彩一点……猪葛亮说的……
+            </span>
+		</div>
+
+	<div class="main">
+		<div class="postbox radius">
+            <h2 class="first_title">Leetcode----Remove Nth Node From End of List</h2>
+            <p class="posted_info">
+                posted by 董三 on 2013-11-12 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
+            </p>
+            <div class="postcontent">
+			<p>
+    <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
+</p>
+<h2 class = "content_h2">
+   Remove Nth Node From End of List
+</h2>
+<pre class="prettyprint">
+Given a linked list, remove the nth node from the end of list and return its head.
+
+For example,
+   Given linked list: 1->2->3->4->5, and n = 2.
+   After removing the second node from the end, the linked list becomes 1->2->3->5.
+<font color="red">
+Note:
+ Given n will always be valid.
+ Try to do this in one pass. </font>
+</pre>
+<h2 class="content_h2">分析</h2>
+<p>&nbsp;&nbsp;题目的意思是，给定一个链表，删除倒数第N个节点，返回新链表的头指针。</p>
+
+<pre class="prettyprint"><font color="red">
+     * 这里题意已经说明n是有意义的，省去了很多有效性判断。
+     * 设置两个快慢指针，初始都指向头指针。先由快指针向前移动n步，然后快慢指针一起向后移动，
+     * 直到快指针指向链表尾，此时慢指针指向的就是倒数n个节点。
+     * 为了删除慢指针指向的这个指针，我们还需要一个指向慢指针前一个节点的指针preNode。
+     * 如果要删除的倒数第n个节点是末尾节点，不需要特殊处理；但是如果这个节点是头节点，
+     * 就需要特别的处理一下了，因为删除了head指针，必须返回head->next（即使为NULL）.
+     * 很容易可以得出，如果遇到n刚好是节点个数的时候，快指针先走的时候，就会指向末尾。</font>
+</pre>
+<h2 class="content_h2">Code</h2>
+<div class="highlight"><pre><code class="c++"><span class="cm">/**</span>
+<span class="cm"> * Definition for singly-linked list.</span>
+<span class="cm"> * struct ListNode {</span>
+<span class="cm"> *     int val;</span>
+<span class="cm"> *     ListNode *next;</span>
+<span class="cm"> *     ListNode(int x) : val(x), next(NULL) {}</span>
+<span class="cm"> * };</span>
+<span class="cm"> */</span>
+<span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="cm">/* </span>
+<span class="cm">     * 这里题意已经说明n是有意义的，省去了很多有效性判断。</span>
+<span class="cm">     * 设置两个快慢指针，初始都指向头指针。先由快指针向前移动n步，然后快慢指针一起向后移动，</span>
+<span class="cm">     * 直到快指针指向链表尾，此时慢指针指向的就是倒数n个节点。</span>
+<span class="cm">     * 为了删除慢指针指向的这个指针，我们还需要一个指向慢指针前一个节点的指针preNode。</span>
+<span class="cm">     * 如果要删除的倒数第n个节点是末尾节点，不需要特殊处理；但是如果这个节点是头节点，</span>
+<span class="cm">     * 就需要特别的处理一下了，因为删除了head指针，必须返回head-&gt;next（即使为NULL）.</span>
+<span class="cm">     * 很容易可以得出，如果遇到n刚好是节点个数的时候，快指针先走的时候，就会指向末尾。</span>
+<span class="cm">     * */</span>
+    <span class="n">ListNode</span> <span class="o">*</span><span class="n">removeNthFromEnd</span><span class="p">(</span><span class="n">ListNode</span> <span class="o">*</span><span class="n">head</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
+        <span class="c1">// the same Solution instance will be reused for each test case.</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">head</span> <span class="o">||</span> <span class="o">!</span><span class="n">n</span><span class="p">)</span>     <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+        <span class="n">ListNode</span> <span class="o">*</span><span class="n">faster</span> <span class="o">=</span> <span class="n">head</span><span class="p">,</span> <span class="o">*</span><span class="n">slower</span> <span class="o">=</span> <span class="n">head</span><span class="p">,</span> <span class="o">*</span><span class="n">preNode</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">faster</span> <span class="o">=</span> <span class="n">faster</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="c1">//n等于节点个数的特殊情况，也就是要删除的是头节点</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">faster</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">faster</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">faster</span> <span class="o">=</span> <span class="n">faster</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="n">slower</span> <span class="o">=</span> <span class="n">slower</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">preNode</span><span class="p">)</span> 
+                <span class="n">preNode</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+            <span class="k">else</span>    
+                <span class="n">preNode</span> <span class="o">=</span> <span class="n">preNode</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">preNode</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">slower</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>
+    <a href="https://github.com/dariuskylin/leetcode">
+        <img src="http://www.ifdong.com/images/download.jpg" alt="pic" />
+    </a>
+</p>
+
+            </div>
+            
+    		<div class="likepost">
+    			<h2>相关日志</h2>
+    			<ul>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/20/leetcode-Remove-Duplicates-from-Sorted-Array-II.html">Leetcode----Remove Duplicates from Sorted Array II</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/15/leetcode-Remove-Element.html">Leetcode----Remove Element</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/13/leetcode-Add-Binary.html">Leetcode----Add Binary</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/12/leetcode-Remove-Nth-Node-From-End-of-List.html">Leetcode----Remove Nth Node From End of List</a></li>
+    				
+    				<li><a href="http://www.ifdong.com/leetcode/2013/11/12/leetcode-Pascal-Triangle.html">Leetcode----Pascal's Triangle</a></li>
+    				
+    			</ul>
+    		</div>
+        <!-- UY BEGIN -->
+        <div id="uyan_frame"></div>
+        <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1850163"></script>
+        <!-- UY END -->
+	</div>
+		<div class="blank20"></div>
+                <div class="footer radius">
+                        &copy; 董三(dariusdong) 2013 Powered by GitHub <a href="https://github.com/mojombo/jekyll" target="_blank">jekyll</a>
+                </div>
+		<div style="display:none;">
+		<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F751292173225837a2688c4185dd750d6' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		</div>
+        </div>
+</body>
+</html>
+
+

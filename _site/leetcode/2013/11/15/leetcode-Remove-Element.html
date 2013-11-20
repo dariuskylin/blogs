@@ -2,8 +2,8 @@
 <html>
 <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>Leetcode----Single Number dariusdong's BLOG</title>
-        <meta name="keywords" content="leetcode, single numberdariusdong,dongyuchi,blog,logs,博客"/>
+        <title>Leetcode----Remove Element dariusdong's BLOG</title>
+        <meta name="keywords" content="leetcode, Remove Element, Simpledariusdong,dongyuchi,blog,logs,博客"/>
         <meta name="description" content="dariusdong's BLOG，记录学习和工作生活" />
 		<!--<meta name="baidu-site-verification" content="7P3zJDwukPDw2LOy" />-->
         <link href="http://www.ifdong.com/css/common.css" rel="stylesheet" type="text/css" />
@@ -25,41 +25,44 @@
 
 	<div class="main">
 		<div class="postbox radius">
-            <h2 class="first_title">Leetcode----Single Number</h2>
+            <h2 class="first_title">Leetcode----Remove Element</h2>
             <p class="posted_info">
-                posted by 董三 on 2013-10-14 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
+                posted by 董三 on 2013-11-15 分类: <a href="http://www.ifdong.com/categorys/leetcode.html">leetcode</a>
             </p>
             <div class="postcontent">
 			<p>
-<img src="http://www.ifdong.com/images/201310/20131001.jpg" alt="pic" />
+    <img src="http://www.ifdong.com/images/201311/20131101.jpg" alt="pic" />
 </p>
 <h2 class = "content_h2">
-    Single Number
+   Remove Element
 </h2>
 <pre class="prettyprint">
-Given an array of integers, every element appears twice except for one. Find that single one.
-</br>
-Note:
-Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+Given an array and a value, remove all instances of that value in place and return the new length.
+
+The order of elements can be changed. It doesn't matter what you leave beyond the new length.
 </pre>
-<h2 class="content_h2">分析 </h2>
-<p>题意是：给定一个数组，每个数字都出现了2次，只有一个数字出现1次，找出这个数字。</p>
-<p>很显然这个题目可以使用异或求解，因为任何一个数字异或它本身都是0，即A^A=0;而0和任何数字A异或都是A，0^A=A.</p>
+<h2 class="content_h2">分析</h2>
+<p>&nbsp;&nbsp;题目的意思是，给定一个数组和一个值，删除数组中所有等于那个值的元素，返回数组的新长度。</p>
+
+<pre class="prettyprint"><font color="red">
+     * 一道很简单的程序设计题目。
+     *设置一个游标，游标左边的元素都不等于elem</font>
+</pre>
 <h2 class="content_h2">Code</h2>
 <div class="highlight"><pre><code class="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
 <span class="nl">public:</span>
-    <span class="kt">int</span> <span class="n">singleNumber</span><span class="p">(</span><span class="kt">int</span> <span class="n">A</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// Note: The Solution object is instantiated only once and is reused by each test case.</span>
-    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">ret</span> <span class="o">^=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+    <span class="cm">/*  设置一个游标，游标左边的元素都不等于elem */</span>
+    <span class="kt">int</span> <span class="n">removeElement</span><span class="p">(</span><span class="kt">int</span> <span class="n">A</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">elem</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// IMPORTANT: Please reset any member data you declared, as</span>
+        <span class="c1">// the same Solution instance will be reused for each test case.</span>
+        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">elem</span><span class="p">)</span>
+                <span class="n">A</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">index</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">index</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div>
-
 <p>
     <a href="https://github.com/dariuskylin/leetcode">
         <img src="http://www.ifdong.com/images/download.jpg" alt="pic" />
